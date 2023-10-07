@@ -3,3 +3,5 @@ package-lock.json
 .prettierrc
 .vscode
 dist/
+yarn.lock
+bun.lockb
