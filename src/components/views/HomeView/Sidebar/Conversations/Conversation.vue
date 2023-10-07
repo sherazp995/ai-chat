@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import type { IAttachment, IConversation, IRecording } from "@src/types";
+import type { IConversation, IRecording } from "@src/types";
 import type { Ref } from "vue";
 import { computed, ref } from "vue";
 
 import {
   getAvatar,
   getName,
-  hasAttachments,
   shorten,
   getConversationIndex,
 } from "@src/utils";
@@ -156,18 +155,6 @@ const handleRemoveUnread = () => {
               <span :class="{ 'text-indigo-400': props.conversation.unread }">
                 Recording
                 {{ (lastMessage.content as IRecording).duration }}
-              </span>
-            </Typography>
-
-            <!--attachments title-->
-            <Typography
-              v-else-if="hasAttachments(lastMessage)"
-              variant="body-2"
-              class="flex justify-start items-center"
-              :class="{ 'text-indigo-400': props.conversation.unread }"
-            >
-              <span :class="{ 'text-indigo-400': props.conversation.unread }">
-                {{ (lastMessage?.attachments as IAttachment[])[0].name }}
               </span>
             </Typography>
 

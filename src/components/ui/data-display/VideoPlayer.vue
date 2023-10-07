@@ -131,26 +131,3 @@ const handleTrackInput = (value: any, player: any, state: any) => {
   </div>
 </template>
 
-<style>
-/* set the button background */
-.video-player .control-button {
-  background: rgba(255, 255, 255, 0.3) !important;
-}
-
-/* show pause button when the user hovers over the video */
-.video-player:hover .custom-player-controls .control-button {
-  visibility: visible !important;
-}
-
-.video-player:hover .custom-player-controls .controls {
-  visibility: visible !important;
-}
-
-.video-player .control-button:hover {
-  background: rgba(255, 255, 255, 0.5) !important;
-}
-
-.video-player .vjs-poster {
-  background-size: cover !important;
-}
-</style>

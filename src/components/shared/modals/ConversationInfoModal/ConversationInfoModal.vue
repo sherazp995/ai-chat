@@ -7,7 +7,6 @@ import type { IContact, IConversation } from "@src/types";
 import ConversationInfo from "@src/components/shared/modals/ConversationInfoModal/ConversationInfo.vue";
 import EditGroupInfo from "@src/components/shared/modals/ConversationInfoModal/EditGroupInfo.vue";
 import Members from "@src/components/shared/modals/ConversationInfoModal/Members.vue";
-import SharedMedia from "@src/components/shared/modals/ConversationInfoModal/SharedMedia.vue";
 import Modal from "@src/components/ui/utils/Modal.vue";
 import SlideTransition from "@src/components/ui/transitions/SlideTransition.vue";
 
@@ -33,7 +32,6 @@ const ActivePage = computed((): any => {
   if (activePageName.value === "conversation-info") return ConversationInfo;
   else if (activePageName.value === "members") return Members;
   else if (activePageName.value === "group-member") return ConversationInfo;
-  else if (activePageName.value === "shared-media") return SharedMedia;
   else if (activePageName.value === "edit-group") return EditGroupInfo;
 });
 

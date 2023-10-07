@@ -6,7 +6,7 @@ export interface IUser {
   avatar: string;
   token: string;
   lastSeen: Date;
-  contacts: IContact[];
+  contacts?: IContact[];
 }
 
 export interface IContact {
@@ -26,16 +26,6 @@ export interface IPreviewData {
   link: string;
 }
 
-export interface IAttachment {
-  id: number;
-  type: string;
-  name: string;
-  size: string;
-  url: string;
-  thumbnail?: string;
-  file?: File;
-}
-
 export interface IRecording {
   id: number;
   size: string;
@@ -52,7 +42,6 @@ export interface IMessage {
   sender: IContact;
   replyTo?: number;
   previewData?: IPreviewData;
-  attachments?: IAttachment[];
   state: string;
 }
 
@@ -62,7 +51,7 @@ export interface IConversation {
   name?: string;
   avatar?: string;
   admins?: number[];
-  contacts: IContact[];
+  contacts?: IContact[];
   messages: IMessage[];
   pinnedMessage?: IMessage;
   pinnedMessageHidden?: boolean;
@@ -73,7 +62,7 @@ export interface IConversation {
 
 export interface IContactGroup {
   letter: string;
-  contacts: IContact[];
+  contacts?: IContact[];
 }
 
 export interface ISettings {
@@ -83,11 +72,4 @@ export interface ISettings {
   privateMessages: boolean;
   darkMode: boolean;
   borderedTheme: boolean;
-}
-
-export interface IEmoji {
-  n: string[];
-  u: string;
-  r?: string;
-  v?: string[];
 }

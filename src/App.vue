@@ -7,7 +7,6 @@ import { fetchData } from "@src/store/defaults";
 import FadeTransition from "@src/components/ui/transitions/FadeTransition.vue";
 
 // future features:
-// todo add video calling
 
 // Refactoring code:
 // todo refactor ui components to use component utilities.

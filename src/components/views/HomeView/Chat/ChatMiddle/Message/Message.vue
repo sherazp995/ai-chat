@@ -13,10 +13,7 @@ import { inject, ref } from "vue";
 import { getFullName, getMessageById } from "@src/utils";
 
 import Typography from "@src/components/ui/data-display/Typography.vue";
-import Attachments from "@src/components/views/HomeView/Chat/ChatMiddle/Message/Attachments.vue";
-import LinkPreview from "@src/components/views/HomeView/Chat/ChatMiddle/Message/LinkPreview.vue";
 import MessageContextMenu from "@src/components/views/HomeView/Chat/ChatMiddle/Message/MessageContextMenu.vue";
-import Recording from "@src/components/views/HomeView/Chat/ChatMiddle/Message/Recording.vue";
 import MessagePreview from "@src/components/views/HomeView/Chat/MessagePreview.vue";
 import Receipt from "@src/components/views/HomeView/Chat/ChatMiddle/Message/Receipt.vue";
 
@@ -142,33 +139,6 @@ const replyMessage = getMessageById(activeConversation, props.message.replyTo);
             tabindex="0"
           >
           </Typography>
-
-          <!--recording-->
-          <div
-            v-else-if="
-              props.message.content && props.message.type === 'recording'
-            "
-          >
-            <Recording
-              :recording="(props.message.content as IRecording)"
-              :self="props.self"
-            />
-          </div>
-
-          <!--attachments-->
-          <Attachments
-            v-if="(props.message.attachments as [])?.length > 0"
-            :message="props.message"
-            :self="props.self"
-          />
-
-          <!--link preview-->
-          <LinkPreview
-            v-if="props.message.previewData && !props.message.attachments"
-            :self="props.self"
-            :preview-data="(props.message.previewData as IPreviewData)"
-            class="mt-5"
-          />
         </div>
 
         <!--date-->

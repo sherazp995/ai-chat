@@ -8,7 +8,6 @@ import type {
   IContactGroup,
   IUser,
   ISettings,
-  IEmoji,
 } from "@src/types";
 
 const useStore = defineStore("chat", () => {
@@ -25,22 +24,20 @@ const useStore = defineStore("chat", () => {
   const settings: Ref<ISettings> = ref(
     storage.settings || defaults.defaultSettings
   );
-  const recentEmoji: Ref<IEmoji[]> = ref(storage.recentEmoji || []);
-  const emojiSkinTone: Ref<string> = ref(storage.emojiSkinTone || "neutral");
-
   // ui refs
   const activeSidebarComponent: Ref<string> = ref(
     storage.activeSidebarComponent || "messages"
   );
   const delayLoading = ref(true);
-  const activeConversationId: Ref<number | null> = ref(6 || null);
+  // The conversation which is open by default
+  const activeConversationId: Ref<number | null> = ref(1 || null);
   const conversationOpen: Ref<string | undefined> = ref(
     storage.conversationOpen
   );
   // contacts grouped alphabetically.
   const contactGroups: Ref<IContactGroup[] | undefined> = computed(() => {
-    if (user.value) {
-      let sortedContacts = [...user.value.contacts];
+    if (user?.value?.contacts) {
+      let sortedContacts = [...user?.value?.contacts];
 
       sortedContacts.sort();
 
@@ -62,7 +59,7 @@ const useStore = defineStore("chat", () => {
         let group: IContactGroup = { letter: groupName, contacts: [] };
         for (let contact of sortedContacts) {
           if (contact.firstName[0].toUpperCase() === groupName) {
-            group.contacts.push(contact);
+            group?.contacts?.push(contact);
           }
         }
         groups.push(group);
@@ -84,9 +81,6 @@ const useStore = defineStore("chat", () => {
     conversations,
     contactGroups,
     settings,
-    recentEmoji,
-    emojiSkinTone,
-
     // ui refs
     activeSidebarComponent,
     delayLoading,

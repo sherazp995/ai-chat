@@ -4,7 +4,6 @@ import type { IAttachment } from "@src/types";
 import {
   DocumentIcon,
   PhotoIcon,
-  VideoCameraIcon,
 } from "@heroicons/vue/24/outline";
 import Typography from "@src/components/ui/data-display/Typography.vue";
 
@@ -29,10 +28,6 @@ const props = defineProps<{
       <DocumentIcon
         class="h-5 w-5 text-gray-500 dark:text-white dark:text-opacity-70"
         v-else-if="props.attachment.type === 'file'"
-      />
-      <VideoCameraIcon
-        class="h-5 w-5 text-gray-500 dark:text-white dark:text-opacity-70"
-        v-else-if="props.attachment.type === 'video'"
       />
     </div>
 

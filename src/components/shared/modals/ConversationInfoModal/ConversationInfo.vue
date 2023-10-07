@@ -8,15 +8,12 @@ import { getAvatar, getFullName, getName, getOddContact } from "@src/utils";
 import {
   ArrowLeftOnRectangleIcon,
   AtSymbolIcon,
-  BellIcon,
   NoSymbolIcon,
   PencilIcon,
-  ShareIcon,
   TrashIcon,
   UserIcon,
 } from "@heroicons/vue/24/outline";
 import InfoItem from "@src/components/shared/blocks/InfoItem.vue";
-import ImageViewer from "@src/components/shared/modals/ConversationInfoModal/ImageViewer.vue";
 import Typography from "@src/components/ui/data-display/Typography.vue";
 import Button from "@src/components/ui/inputs/Button.vue";
 import IconButton from "@src/components/ui/inputs/IconButton.vue";
@@ -27,7 +24,6 @@ const props = defineProps<{
   closeModal: () => void;
 }>();
 
-const openImageViewer = ref(false);
 
 const imageUrl = computed(() => {
   if (props.contact) {
@@ -87,35 +83,6 @@ const imageUrl = computed(() => {
     <!--top-->
     <div class="w-full p-5 pb-6">
       <div class="flex">
-        <!--avatar-->
-        <div class="mr-5">
-          <button
-            v-if="props.contact"
-            @click="openImageViewer = true"
-            class="outline-none"
-            aria-label="view avatar"
-          >
-            <div
-              :style="{ backgroundImage: `url(${props.contact.avatar})` }"
-              class="w-[38px] h-[38px] rounded-full bg-cover bg-center"
-            ></div>
-          </button>
-
-          <button
-            v-else
-            @click="openImageViewer = true"
-            class="outline-none"
-            aria-label="view avatar"
-          >
-            <div
-              :style="{
-                backgroundImage: `url(${getAvatar(props.conversation)})`,
-              }"
-              class="w-[38px] h-[38px] rounded-full bg-cover bg-center"
-            ></div>
-          </button>
-        </div>
-
         <!--name-->
         <div class="w-full flex justify-between">
           <div>
@@ -197,22 +164,6 @@ const imageUrl = computed(() => {
           "
         />
       </div>
-
-      <!--media-->
-      <div class="px-5 pt-5 flex items-center">
-        <InfoItem
-          :icon="ShareIcon"
-          title="shared media"
-          link
-          chevron
-          @click="
-            $emit('active-page-change', {
-              tabName: 'shared-media',
-              animationName: 'slide-left',
-            })
-          "
-        />
-      </div>
     </div>
 
     <!--bottom-->
@@ -258,12 +209,5 @@ const imageUrl = computed(() => {
         />
       </div>
     </div>
-
-    <!--image viewer-->
-    <ImageViewer
-      :image-url="imageUrl"
-      :open="openImageViewer"
-      :close-image="() => (openImageViewer = false)"
-    />
   </div>
 </template>

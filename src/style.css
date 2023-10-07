@@ -38,18 +38,4 @@
   .slider::-webkit-slider-runnable-track {
     @apply rounded-[4px] h-[6px] cursor-pointer;
   }
-
-  .video-slider {
-    background: transparent !important;
-  }
-
-  .video-slider::-moz-range-thumb {
-    width: 0px;
-    height: 0px;
-  }
-
-  .video-slider::-webkit-slider-thumb {
-    width: 0px;
-    height: 0px;
-  }
 }

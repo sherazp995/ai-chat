@@ -25,7 +25,7 @@ export const getOddContact = (conversation: IConversation) => {
 
   let oddContact;
 
-  for (let contact of conversation.contacts) {
+  for (let contact of conversation?.contacts) {
     if (store.user && contact.id !== store.user.id) {
       oddContact = contact;
     }
@@ -95,16 +95,6 @@ export const shorten = (message: IMessage | string, maxLength: number = 23) => {
 };
 
 /**
- * test if the message contains attachments
- * @param message
- * @returns A boolean indicating whether the message has attachments
- */
-export const hasAttachments = (message: IMessage) => {
-  let attachments = message.attachments;
-  return attachments && attachments.length > 0;
-};
-
-/**
  * get index of the conversation inside the conversations array
  * @param conversationId
  * @returns A number indicating the index of the conversation.
@@ -131,17 +121,4 @@ export const getMessageById = (
   if (messageId) {
     return conversation.messages.find((message) => message.id === messageId);
   }
-};
-
-/**
- * Convert unicode to native emoji
- *
- * @param unicode - emoji unicode
- */
-export const unicodeToEmoji = (unicode: string) => {
-  return unicode
-    .split("-")
-    .map((hex) => parseInt(hex, 16))
-    .map((hex) => String.fromCodePoint(hex))
-    .join("");
 };

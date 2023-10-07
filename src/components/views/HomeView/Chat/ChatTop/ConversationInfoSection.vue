@@ -110,16 +110,6 @@ const handleCloseConversation = () => {
             <InformationCircleIcon class="h-5 w-5 mr-3 text-black opacity-60 dark:text-white dark:opacity-70" />
             Profile Information
           </DropdownLink>
-
-          <DropdownLink :handle-click="handleCloseDropdown">
-            <ShareIcon class="h-5 w-5 mr-3 text-black opacity-60 dark:text-white dark:opacity-70" />
-            Shared media
-          </DropdownLink>
-
-          <DropdownLink :handle-click="handleCloseDropdown" color="danger">
-            <NoSymbolIcon class="h-5 w-5 mr-3" />
-            Block contact
-          </DropdownLink>
         </Dropdown>
       </div>
     </div>
