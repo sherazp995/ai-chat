@@ -32,7 +32,7 @@ router.get('/:id', async (req, res) => {
 router.post("/register", async (req, res) => {
   try {
     let user = req.body;
-    let result = await User.findOne({ email: user.email });
+    let result = await User.findOne({ where: { email: user.email } });
     let message = '';
     if (result) {
       message = 'User Already Exist!';
@@ -42,6 +42,7 @@ router.post("/register", async (req, res) => {
       result = await User.create(user);
       message = 'User Created Successfully!';
     }
+    console.log(message)
     res.json({ status: 200, result, message });
   } catch (error) {
     console.log(error);
@@ -83,7 +84,7 @@ router.delete('/:id', async (req, res) => {
 // Login a user
 router.post('/login', async (req, res) => {
   try {
-    let result = await User.findOne({ username: req.body.email });
+    let result = await User.findOne({ where: { email: req.body.email } });
 
     if (result) {
       if (passwordHash.verify(req.body.password, result.password)) {

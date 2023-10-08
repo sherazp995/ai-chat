@@ -19,7 +19,7 @@ const useStore = defineStore("chat", () => {
 
   // app data refs
   // data refs
-  const user: Ref<IUser | undefined> = ref(defaults.user);
+  const user: Ref<IUser | undefined> = ref(JSON.parse(localStorage.getItem('ai-chat-user') || '{}') || defaults.user);
   const conversations: Ref<IConversation[]> = ref(defaults.conversations || []);
   const settings: Ref<ISettings> = ref(
     storage.settings || defaults.defaultSettings
@@ -30,7 +30,7 @@ const useStore = defineStore("chat", () => {
   );
   const delayLoading = ref(true);
   // The conversation which is open by default
-  const activeConversationId: Ref<number | null> = ref(1 || null);
+  const activeConversationId: Ref<number | null> = ref(null);
   const conversationOpen: Ref<string | undefined> = ref(
     storage.conversationOpen
   );

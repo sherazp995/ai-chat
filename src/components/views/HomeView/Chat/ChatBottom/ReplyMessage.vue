@@ -17,7 +17,7 @@ const activeConversation = <IConversation>inject("activeConversation");
 const removeReplyMessage = () => {
   if (activeConversation) {
     // get the active conversation index in the state store
-    let activeConversationIndex = getConversationIndex(activeConversation.id);
+    let activeConversationIndex = getConversationIndex(activeConversation?.id);
 
     if (
       store.conversations &&
@@ -47,9 +47,7 @@ const removeReplyMessage = () => {
         title="remove reply"
         aria-label="remove reply"
       >
-        <XCircleIcon
-          class="w-[16px] h-[16px] text-gray-300 group-hover:text-red-300"
-        />
+        <XCircleIcon class="w-[16px] h-[16px] text-gray-300 group-hover:text-red-300" />
       </IconButton>
     </div>
   </SlideTransition>

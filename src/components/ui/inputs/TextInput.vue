@@ -8,11 +8,13 @@ const props = defineProps<{
   id?: string;
   type?: string;
   label?: string;
+  model?: any;
   value?: string;
   placeholder?: string;
   description?: string;
   variant?: string;
   class?: string;
+  required?: string;
 }>();
 
 const baseClasses = `max-w-full w-full h-8 p-4 rounded-sm content-center
@@ -49,13 +51,14 @@ const classes = twMerge(baseClasses, variantClasses.value, props.class);
     <div class="relative">
       <input
         @input="
-          $emit('valueChanged', ($event.target as HTMLInputElement).value)
+          $emit('valueChanged', {value: ($event.target as HTMLInputElement).value, model: props.model})
         "
         :type="props.type || 'text'"
         :id="props.id"
         :value="props.value"
         :class="classes"
         :placeholder="props.placeholder"
+        :required="!!props.required ? true : undefined"
       />
 
       <div class="absolute top-0 right-0">

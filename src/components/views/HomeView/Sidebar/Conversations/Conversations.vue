@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { IConversation } from "@src/types";
 import type { Ref } from "vue";
-import { onMounted, ref, watch } from "vue";
+import { ref, watch } from "vue";
 
 import useStore from "@src/store/store";
 import { getName } from "@src/utils";
@@ -30,9 +30,7 @@ watch([keyword], () => {
   // search archived conversations
   filteredConversations.value =
     store.conversations?.filter((conversation) =>
-      getName(conversation)
-        ?.toLowerCase()
-        .includes(keyword.value.toLowerCase())
+      getName(conversation)?.toLowerCase().includes(keyword.value.toLowerCase())
     ) || [];
 });
 
@@ -44,6 +42,20 @@ const handleConversationChange = (conversationId: number) => {
 
 // (event) close the compose modal.
 const closeComposeModal = () => {
+  composeOpen.value = false;
+};
+
+const addNewConversation = () => {
+  // Push the new conversation to the list
+  store.conversations.push();
+
+  // Optionally, you can reset the keyword search to show the newly added conversation
+  keyword.value = "";
+
+  // Optionally, you can set the newly added conversation as active
+  // handleConversationChange();
+
+  // Close the compose modal or perform any other necessary actions
   composeOpen.value = false;
 };
 </script>
@@ -106,7 +118,7 @@ const closeComposeModal = () => {
         </div>
 
         <div v-else>
-          <NoConversation/>
+          <NoConversation />
         </div>
       </div>
     </div>

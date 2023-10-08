@@ -20,12 +20,9 @@ const activeConversation = <IConversation>inject("activeConversation");
 // the content of the message.
 const value: Ref<string> = ref("");
 
-// determines whether the app is recording or not.
-const recording = ref(false);
-
 // (event) set the draft message equals the content of the text area
 const handleSetDraft = () => {
-  const index = getConversationIndex(activeConversation.id);
+  const index = getConversationIndex(activeConversation?.id);
   if (index !== undefined) {
     store.conversations[index].draftMessage = value.value;
   }
@@ -49,11 +46,10 @@ onMounted(() => {
     <div
       class="h-auto min-h-[84px] p-5 flex items-end"
       v-if="store.status !== 'loading'"
-      :class="recording ? ['justify-between'] : []"
     >
 
       <!--message textarea-->
-      <div class="grow md:mr-5 xs:mr-4 self-end" v-if="!recording">
+      <div class="grow md:mr-5 xs:mr-4 self-end">
         <div class="relative">
           <Textarea
             v-model="value"
@@ -72,7 +68,6 @@ onMounted(() => {
       <div class="min-h-[44px] flex">
         <!--send message button-->
         <IconButton
-          v-if="!recording"
           class="group w-7 h-7 bg-indigo-300 hover:bg-indigo-400 focus:bg-indigo-400 dark:focus:bg-indigo-300 dark:bg-indigo-400 dark:hover:bg-indigo-400 active:scale-110"
           variant="ghost"
           title="send message"

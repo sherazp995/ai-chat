@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import { RouterLink } from "vue-router";
+import { RouterLink, useRouter } from "vue-router";
 
 import SlideTransition from "@src/components/ui/transitions/SlideTransition.vue";
 import Typography from "@src/components/ui/data-display/Typography.vue";
 import PasswordSection from "@src/components/views/AccessView/RegisterForm/PasswordSection.vue";
 import PersonalSection from "@src/components/views/AccessView/RegisterForm/PersonalSection.vue";
+import { signup } from "@src/store/api";
 
 defineEmits(["activeSectionChange"]);
-
+const router = useRouter();
+const formData = ref({});
 // determines what form section to use.
 const activeSectionName = ref("personal-section");
 
@@ -25,19 +27,23 @@ const ActiveSection = computed((): any => {
 });
 
 // (event) to move between modal pages
-const changeActiveSection = (event: {
-  sectionName: string;
-  animationName: string;
-}) => {
+const changeActiveSection = (event: { sectionName: string; animationName: string }) => {
   animation.value = event.animationName;
   activeSectionName.value = event.sectionName;
 };
+
+function userInfo(data: any) {
+  !data.isTrusted && (formData.value = { ...formData.value, ...data });
+}
+
+async function submitForm(data: any) {
+  !data.isTrusted && (formData.value = { ...formData.value, ...data });
+  data.password && (await signup(formData.value)) && router.push("/access/sign-in");
+}
 </script>
 
 <template>
-  <div
-    class="p-5 md:basis-1/2 xs:basis-full flex flex-col justify-center items-center"
-  >
+  <div class="p-5 md:basis-1/2 xs:basis-full flex flex-col justify-center items-center">
     <div class="w-full md:px-[26%] xs:px-[10%]">
       <!--header-->
       <div class="mb-6 flex flex-col">
@@ -45,9 +51,7 @@ const changeActiveSection = (event: {
           src="@src/assets/vectors/logo-gradient.svg"
           class="w-[22px] h-[18px] mb-5 opacity-70"
         />
-        <Typography variant="heading-2" class="mb-4"
-          >Get started with Avian</Typography
-        >
+        <Typography variant="heading-2" class="mb-4">Get started with Avian</Typography>
         <Typography variant="body-3" class="text-opacity-75 font-light">
           Sign in to start using messaging!
         </Typography>
@@ -56,6 +60,8 @@ const changeActiveSection = (event: {
       <!--form section-->
       <SlideTransition :animation="animation">
         <component
+          @info="userInfo"
+          @submit="submitForm"
           @active-section-change="changeActiveSection"
           :is="ActiveSection"
         />

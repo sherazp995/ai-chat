@@ -8,6 +8,25 @@ import ContactItem from "@src/components/shared/blocks/ContactItem.vue";
 import ScrollBox from "@src/components/ui/utils/ScrollBox.vue";
 
 const store = useStore();
+
+function addNewConversation(contact: any) {
+  console.log(contact);
+  let conversation = store.conversations.find(
+    (c: any) =>
+      c.contacts.filter((u: any) => [store.user?.id, contact.id].includes(u.id)).length >
+      1
+  );
+  if (conversation) {
+  } else {
+    // if conversation not found. make one
+    store.conversations.push({
+      id: null,
+      type: "couple",
+      draftMessage: "",
+      contacts: [contact, store.user],
+    });
+  }
+}
 </script>
 
 <template>
@@ -29,9 +48,11 @@ const store = useStore();
           store.status === 'success' &&
           !store.delayLoading &&
           store.user &&
-          store.user.contacts.length > 0
+          store.user?.contacts &&
+          store.user?.contacts.length > 0
         "
         v-for="(contact, index) in store.user.contacts"
+        @click="addNewConversation(contact)"
         :key="index"
         :contact="contact"
       />

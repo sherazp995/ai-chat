@@ -11,7 +11,8 @@
   },
   "dependencies": {
     "@heroicons/vue": "^2.0.18",
-    "@vueuse/integrations": "^10.4.1",
+    "@vueuse/integrations": "^10.5.0",
+    "axios": "^1.5.1",
     "click-outside-vue3": "^4.0.1",
     "focus-trap": "^7.5.3",
     "linkify-string": "^4.1.1",

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted } from "vue";
+import { computed } from "vue";
 
 import useStore from "@src/store/store";
 
@@ -47,10 +47,7 @@ const activeChatComponent = computed((): any => {
         role="region"
       >
         <FadeTransition name="fade" mode="out-in">
-          <component
-            :is="activeChatComponent"
-            :key="store.activeConversationId"
-          />
+          <component :is="activeChatComponent" :key="store.activeConversationId" />
         </FadeTransition>
       </div>
     </div>

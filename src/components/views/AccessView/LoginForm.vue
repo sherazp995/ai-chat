@@ -3,18 +3,32 @@ import { ref } from "vue";
 
 import Typography from "@src/components/ui/data-display/Typography.vue";
 import Button from "@src/components/ui/inputs/Button.vue";
-import IconButton from "@src/components/ui/inputs/IconButton.vue";
 import TextInput from "@src/components/ui/inputs/TextInput.vue";
-import { EyeSlashIcon, EyeIcon } from "@heroicons/vue/24/outline";
-import { RouterLink } from "vue-router";
+import { RouterLink, useRouter } from "vue-router";
+import { login } from "@src/store/api";
 
-const showPassword = ref(false);
+const router = useRouter();
+const email = ref("");
+const password = ref("");
+
+function handleValueChanged(event: any) {
+  if (event.model == "email") {
+    email.value = event.value;
+  } else if (event.model == "password") {
+    password.value = event.value;
+  }
+}
+async function onSubmit() {
+  let formData = {
+    email: email.value,
+    password: password.value,
+  };
+  (await login(formData)) && router.push("/");
+}
 </script>
 
 <template>
-  <div
-    class="p-5 md:basis-1/2 xs:basis-full flex flex-col justify-center items-center"
-  >
+  <div class="p-5 md:basis-1/2 xs:basis-full flex flex-col justify-center items-center">
     <div class="w-full md:px-[26%] xs:px-[10%]">
       <!--header-->
       <div class="mb-6 flex flex-col">
@@ -30,39 +44,34 @@ const showPassword = ref(false);
       </div>
 
       <!--form-->
-      <div class="mb-6">
-        <TextInput label="Email" placeholder="Enter your email" class="mb-5" />
-        <TextInput
-          label="Password"
-          placeholder="Enter your password"
-          :type="showPassword ? 'text' : 'password'"
-          class="pr-[40px]"
-        >
-          <template v-slot:endAdornment>
-            <IconButton
-              title="toggle password visibility"
-              aria-label="toggle password visibility"
-              class="m-[8px] p-2"
-              @click="showPassword = !showPassword"
-            >
-              <EyeSlashIcon
-                v-if="showPassword"
-                class="w-5 h-5 text-black opacity-50 dark:text-white dark:opacity-60"
-              />
-              <EyeIcon
-                v-else
-                class="w-5 h-5 text-black opacity-50 dark:text-white dark:opacity-60"
-              />
-            </IconButton>
-          </template>
-        </TextInput>
-      </div>
+      <form action="#" @submit.prevent="onSubmit" target="_blank" id="login_form">
+        <div class="mb-6">
+          <TextInput
+            label="Email"
+            model="email"
+            type="email"
+            @valueChanged="handleValueChanged"
+            placeholder="Enter your email"
+            class="mb-5"
+            required="required"
+          />
+          <TextInput
+            label="Password"
+            model="password"
+            type="password"
+            @valueChanged="handleValueChanged"
+            placeholder="Enter your password"
+            class="pr-[40px]"
+            required="required"
+          >
+          </TextInput>
+        </div>
 
-      <!--local controls-->
-      <div class="mb-6">
-        <Button class="w-full mb-4" link to="/">Sign in</Button>
-      </div>
-
+        <!--local controls-->
+        <div class="mb-6">
+          <Button class="w-full mb-4">Sign in</Button>
+        </div>
+      </form>
       <!--divider-->
       <div class="mb-6 flex items-center">
         <span
@@ -81,10 +90,7 @@ const showPassword = ref(false);
         <div class="flex justify-center">
           <Typography variant="body-2"
             >Don't have an account ?
-            <RouterLink
-              to="/access/sign-up/"
-              class="text-indigo-400 opacity-100"
-            >
+            <RouterLink to="/access/sign-up/" class="text-indigo-400 opacity-100">
               Sign up
             </RouterLink>
           </Typography>
