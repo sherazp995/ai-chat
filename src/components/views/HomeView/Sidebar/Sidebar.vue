@@ -10,6 +10,10 @@ import Settings from "@src/components/views/HomeView/Sidebar/Settings/Settings.v
 
 const store = useStore();
 
+const props = defineProps<{
+  handleConversationChange?: (conversationId: number) => void;
+}>();
+
 // the selected sidebar component (e.g message/settings)
 const ActiveComponent = computed((): any => {
   if (store.activeSidebarComponent === "messages") {
@@ -27,7 +31,11 @@ const ActiveComponent = computed((): any => {
     class="xs:w-full md:w-[290px] h-full xs:px-5 md:p-0 flex flex-col overflow-visible transition-all duration-500"
   >
     <FadeTransition>
-      <component :is="ActiveComponent" class="h-full flex flex-col" />
+      <component
+        :handle-conversation-change="props.handleConversationChange"
+        :is="ActiveComponent"
+        class="h-full flex flex-col"
+      />
     </FadeTransition>
   </aside>
 </template>

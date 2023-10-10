@@ -14,7 +14,8 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'conversationId'
       });
       Message.belongsTo(models.User, {
-        foreignKey: 'sender'
+        foreignKey: 'senderId',
+        as: 'sender',
       });
     }
   }
@@ -22,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
     type: DataTypes.STRING,
     content: DataTypes.STRING,
     date: DataTypes.STRING,
-    sender: DataTypes.INTEGER,
+    senderId: DataTypes.INTEGER,
     replyTo: DataTypes.STRING,
     conversationId: DataTypes.INTEGER,
     state: DataTypes.ENUM('read', 'sent', 'delivered', 'waiting')

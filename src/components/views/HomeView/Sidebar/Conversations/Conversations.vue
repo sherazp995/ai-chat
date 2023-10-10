@@ -15,6 +15,8 @@ import SearchInput from "@src/components/ui/inputs/SearchInput.vue";
 import FadeTransition from "@src/components/ui/transitions/FadeTransition.vue";
 import ConversationsList from "@src/components/views/HomeView/Sidebar/Conversations/ConversationsList.vue";
 import SidebarHeader from "@src/components/views/HomeView/Sidebar/SidebarHeader.vue";
+import { allMessages } from "@src/store/api";
+import { getConversationIndex } from "@src/utils";
 
 const store = useStore();
 
@@ -35,27 +37,15 @@ watch([keyword], () => {
 });
 
 // (event) switch between the rendered conversations.
-const handleConversationChange = (conversationId: number) => {
+const handleConversationChange = async (conversationId: number) => {
   store.activeConversationId = conversationId;
+  const index = getConversationIndex(conversationId);
+  store.conversations[index].messages = await allMessages();
   store.conversationOpen = "open";
 };
 
 // (event) close the compose modal.
 const closeComposeModal = () => {
-  composeOpen.value = false;
-};
-
-const addNewConversation = () => {
-  // Push the new conversation to the list
-  store.conversations.push();
-
-  // Optionally, you can reset the keyword search to show the newly added conversation
-  keyword.value = "";
-
-  // Optionally, you can set the newly added conversation as active
-  // handleConversationChange();
-
-  // Close the compose modal or perform any other necessary actions
   composeOpen.value = false;
 };
 </script>
@@ -124,6 +114,10 @@ const addNewConversation = () => {
     </div>
 
     <!--compose modal-->
-    <ComposeModal :handle-conversation-change="handleConversationChange" :open="composeOpen" :close-modal="closeComposeModal" />
+    <ComposeModal
+      :handle-conversation-change="handleConversationChange"
+      :open="composeOpen"
+      :close-modal="closeComposeModal"
+    />
   </div>
 </template>

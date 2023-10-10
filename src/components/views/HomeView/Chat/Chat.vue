@@ -50,9 +50,7 @@ const handleSelectMessage = (messageId: number) => {
 // (event) remove message from select messages.
 const handleDeselectMessage = (messageId: number) => {
   selectAll.value = false;
-  selectedMessages.value = selectedMessages.value.filter(
-    (item) => item !== messageId
-  );
+  selectedMessages.value = selectedMessages.value.filter((item) => item !== messageId);
 
   if (activeConversation.value && selectedMessages.value.length === 0) {
     selectMode.value = false;
@@ -62,9 +60,8 @@ const handleDeselectMessage = (messageId: number) => {
 // (event) select all messages.
 const handleSelectAll = () => {
   if (activeConversation.value) {
-    const messages = activeConversation.value?.messages?.map(
-      (message) => message.id
-    ) || [];
+    const messages =
+      activeConversation.value?.messages?.map((message) => message.id) || [];
     selectedMessages.value = messages;
     selectAll.value = true;
   }

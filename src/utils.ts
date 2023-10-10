@@ -25,7 +25,7 @@ export const getOddContact = (conversation: IConversation) => {
 
   let oddContact;
 
-  for (let contact of conversation?.contacts) {
+  for (let contact of (conversation?.contacts || [])) {
     if (store.user && contact.id !== store.user.id) {
       oddContact = contact;
     }
@@ -121,6 +121,6 @@ export const getMessageById = (
   messageId?: number
 ) => {
   if (messageId) {
-    return conversation.messages.find((message) => message.id === messageId);
+    return conversation.messages?.find((message) => message.id === messageId);
   }
 };

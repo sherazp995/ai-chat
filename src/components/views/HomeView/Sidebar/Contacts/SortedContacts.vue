@@ -4,6 +4,7 @@ import type { Ref } from "vue";
 import { ref } from "vue";
 
 import { getFullName } from "@src/utils";
+import useStore from "@src/store/store";
 
 import {
   EllipsisVerticalIcon,
@@ -14,11 +15,15 @@ import Typography from "@src/components/ui/data-display/Typography.vue";
 import IconButton from "@src/components/ui/inputs/IconButton.vue";
 import Dropdown from "@src/components/ui/navigation/Dropdown/Dropdown.vue";
 import DropdownLink from "@src/components/ui/navigation/Dropdown/DropdownLink.vue";
+import { createConversation } from "@src/store/api";
 
 const props = defineProps<{
   contactGroups?: IContactGroup[];
   bottomEdge?: number;
+  handleConversationChange: (conversationId: number) => void;
 }>();
+
+const store = useStore();
 
 // the position of the dropdown menu.
 const dropdownMenuPosition = ref(["top-6", "right-0"]);
@@ -26,7 +31,7 @@ const dropdownMenuPosition = ref(["top-6", "right-0"]);
 // controll the states of contact dropdown menus
 const dropdownMenuStates: Ref<boolean[][] | undefined> = ref(
   props.contactGroups?.map((contactGroup) => {
-    let group = contactGroup.contacts.map(() => false);
+    let group = contactGroup.contacts?.map(() => false);
     return group;
   })
 );
@@ -34,21 +39,16 @@ const dropdownMenuStates: Ref<boolean[][] | undefined> = ref(
 // close all contact dropdown menus
 const handleCloseAllMenus = () => {
   dropdownMenuStates.value = props.contactGroups?.map((contactGroup) => {
-    let group = contactGroup.contacts.map(() => false);
+    let group = contactGroup.contacts?.map(() => false);
     return group;
   });
 };
 
 // (event) open/close the selected dropdown menu.
-const handleToggleDropdown = (
-  event: Event,
-  groupIndex: number,
-  index: number
-) => {
+const handleToggleDropdown = (event: Event, groupIndex: number, index: number) => {
   if (props.bottomEdge) {
-    let buttonBottom = (
-      event.currentTarget as HTMLElement
-    ).getBoundingClientRect().bottom;
+    let buttonBottom = (event.currentTarget as HTMLElement).getBoundingClientRect()
+      .bottom;
 
     if (buttonBottom >= props.bottomEdge - 75) {
       dropdownMenuPosition.value = ["bottom-6", "right-0"];
@@ -57,18 +57,16 @@ const handleToggleDropdown = (
     }
   }
 
-  dropdownMenuStates.value = (dropdownMenuStates.value as boolean[][]).map(
-    (group) => {
-      return group.map((value, idx) => {
-        if (idx === index) return value;
-        else return false;
-      });
-    }
-  );
+  dropdownMenuStates.value = (dropdownMenuStates.value as boolean[][]).map((group) => {
+    return group.map((value, idx) => {
+      if (idx === index) return value;
+      else return false;
+    });
+  });
 
-  dropdownMenuStates.value[groupIndex][index] = !(
-    dropdownMenuStates.value as boolean[][]
-  )[groupIndex][index];
+  dropdownMenuStates.value[groupIndex][
+    index
+  ] = !(dropdownMenuStates.value as boolean[][])[groupIndex][index];
 };
 
 // (event) close doprdown menu when clicking outside
@@ -84,6 +82,25 @@ const handleClickOutside = (event: Event) => {
     handleCloseAllMenus();
   }
 };
+
+async function addNewConversation(contact: any) {
+  let conversation = store.conversations.find((conv: any) => {
+    let contacts = conv.contacts.map((c: any) => c.id);
+    return conv.type === "couple" && contacts.includes(contact.id);
+  });
+  if (!conversation) {
+    let c = {
+      name: `${contact.firstName} ${contact.lastName}`,
+      type: "couple",
+      draftMessage: "",
+      avatar: contact.avatar,
+      contacts: [contact.id, store.user?.id],
+    };
+    conversation = await createConversation(c);
+    if (!!conversation) store.conversations.push(conversation);
+  }
+  if (!!conversation) props.handleConversationChange(conversation?.id);
+}
 </script>
 
 <template>
@@ -98,6 +115,7 @@ const handleClickOutside = (event: Event) => {
       <div class="w-full p-5 flex justify-between items-center">
         <button
           class="default-outline transition-all duration-200 ease-out"
+          @click="addNewConversation(contact)"
           :aria-label="getFullName(contact)"
         >
           <div class="flex-row">

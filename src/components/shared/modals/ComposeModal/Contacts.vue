@@ -6,7 +6,7 @@ import Loading1 from "@src/components/states/loading-states/Loading1.vue";
 import SearchInput from "@src/components/ui/inputs/SearchInput.vue";
 import ContactItem from "@src/components/shared/blocks/ContactItem.vue";
 import ScrollBox from "@src/components/ui/utils/ScrollBox.vue";
-import { createConversation } from "@src/store/api"
+import { createConversation } from "@src/store/api";
 
 const store = useStore();
 const emits = defineEmits(["select-conversation"]);
@@ -14,32 +14,36 @@ const emits = defineEmits(["select-conversation"]);
 const props = defineProps<{
   handleConversationChange: (conversationId: number) => void;
 }>();
+
 async function addNewConversation(contact: any) {
-  console.log(contact);
-  let conversation = store.conversations.find(
-    (c: any) =>
-      c.contacts.filter((u: any) => [store.user?.id, contact.id].includes(u.id)).length >
-      1
-  );
-  console.log(conversation);
+  let conversation = store.conversations.find((conv: any) => {
+    return (
+      conv.type === "couple" && conv.contacts.map((c: any) => c.id).includes(contact.id)
+    );
+  });
   if (!conversation) {
     let c = {
       name: `${contact.firstName} ${contact.lastName}`,
       type: "couple",
       draftMessage: "",
       avatar: contact.avatar,
-      contacts: [contact.id, store.user?.id]
-    }
+      contacts: [contact.id, store.user?.id],
+    };
     conversation = await createConversation(c);
-  console.log(conversation);
-
-    // if conversation not found. make one
-    if(!!conversation)
-    store.conversations.push(conversation);
+    if (!!conversation) store.conversations.push(conversation);
   }
-  if(!!conversation)
-  props.handleConversationChange(conversation?.id)
+  if (!!conversation) props.handleConversationChange(conversation?.id);
 }
+
+// function filterContactWithConversation(){
+//   .filter((c) => {
+//           !store.conversations.find((conv: any) => {
+//             const a = conv.contacts.sort()
+//             const b = [c.id, store.user?.id].sort()
+//             return (conv.type === 'couple' &&  a == b)
+//           })
+//         })
+// }
 </script>
 
 <template>

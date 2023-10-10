@@ -13,6 +13,7 @@ const props = defineProps<{
   placeholder?: string;
   description?: string;
   variant?: string;
+  name?: string;
   class?: string;
   required?: string;
 }>();
@@ -57,6 +58,7 @@ const classes = twMerge(baseClasses, variantClasses.value, props.class);
         :id="props.id"
         :value="props.value"
         :class="classes"
+        :name="name"
         :placeholder="props.placeholder"
         :required="!!props.required ? true : undefined"
       />

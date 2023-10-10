@@ -18,7 +18,7 @@ module.exports = {
       date: {
         type: Sequelize.STRING
       },
-      sender: {
+      senderId: {
         type: Sequelize.INTEGER
       },
       replyTo: {

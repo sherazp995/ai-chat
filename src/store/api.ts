@@ -48,6 +48,45 @@ export async function createConversation(data: any) {
     }
 }
 
+export async function allConversations() {
+    try {
+        let response = await axios.get(apiPath + `conversations`, headers())
+        if (!!response.data.result) {
+            return response.data.result;
+        }
+        return [];
+    } catch (e) {
+        console.log(e);
+        return [];
+    }
+}
+
+export async function createMessage(data: any) {
+    try {
+        let response = await axios.post(apiPath + `messages/new`, data, headers())
+        if (response.status == 200) {
+            return response.data.result;
+        }
+        return false;
+    } catch (e) {
+        console.log(e);
+        return false;
+    }
+}
+
+export async function allMessages() {
+    try {
+        let response = await axios.get(apiPath + `messages`, headers())
+        if (!!response.data.result) {
+            return response.data.result;
+        }
+        return [];
+    } catch (e) {
+        console.log(e);
+        return [];
+    }
+}
+
 export async function login(data: any) {
     try {
         let response = await axios.post(apiPath + `users/login`, data)

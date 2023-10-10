@@ -15,15 +15,17 @@ import ScrollBox from "@src/components/ui/utils/ScrollBox.vue";
 
 const store = useStore();
 
+const props = defineProps<{
+  contacts: (contacts: any[]) => void;
+}>();
+
 // a list of contacts selected to make a call
 const selectedContacts: Ref<IContact[]> = ref([]);
 
 // checks whether a contact is selected or not
 const isContactSelected = (contact: IContact) => {
   if (contact) {
-    return Boolean(
-      selectedContacts.value.find((item) => item.id === contact.id)
-    );
+    return Boolean(selectedContacts.value.find((item) => item.id === contact.id));
   } else {
     return false;
   }
@@ -31,15 +33,17 @@ const isContactSelected = (contact: IContact) => {
 
 // (event) change the value of selected contacts
 const handleSelectedContactsChange = (contact: IContact) => {
-  let contactIndex = selectedContacts.value.findIndex(
-    (item) => item.id === contact.id
-  );
+  let contactIndex = selectedContacts.value.findIndex((item) => item.id === contact.id);
   if (contactIndex !== -1) {
     selectedContacts.value.splice(contactIndex, 1);
   } else {
     selectedContacts.value.push(contact);
   }
 };
+
+function onSubmit() {
+  props.contacts(selectedContacts?.value);
+}
 </script>
 
 <template>
@@ -89,6 +93,7 @@ const handleSelectedContactsChange = (contact: IContact) => {
       <!--next button-->
       <Button
         class="px-5 bg-indigo-400 hover:bg-indigo-500 active:bg-indigo-500"
+        @click="onSubmit"
       >
         Finish
       </Button>

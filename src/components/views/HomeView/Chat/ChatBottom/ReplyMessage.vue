@@ -44,6 +44,7 @@ const removeReplyMessage = () => {
       <IconButton
         @click="removeReplyMessage"
         class="group w-7 h-7"
+        type="button"
         title="remove reply"
         aria-label="remove reply"
       >

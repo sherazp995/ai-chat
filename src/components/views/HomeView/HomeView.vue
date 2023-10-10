@@ -9,6 +9,8 @@ import Sidebar from "@src/components/views/HomeView/Sidebar/Sidebar.vue";
 import NoChatSelected from "@src/components/states/empty-states/NoChatSelected.vue";
 import Loading3 from "@src/components/states/loading-states/Loading3.vue";
 import FadeTransition from "@src/components/ui/transitions/FadeTransition.vue";
+import { allMessages } from "@src/store/api";
+import { getConversationIndex } from "@src/utils";
 
 const store = useStore();
 
@@ -22,6 +24,15 @@ const activeChatComponent = computed((): any => {
     return NoChatSelected;
   }
 });
+
+// (event) switch between the rendered conversations.
+const handleConversationChange = async (conversationId: number) => {
+  store.activeSidebarComponent = "messages";
+  store.activeConversationId = conversationId;
+  const index = getConversationIndex(conversationId);
+  store.conversations[index].messages = await allMessages();
+  store.conversationOpen = "open";
+};
 </script>
 
 <template>
@@ -33,6 +44,7 @@ const activeChatComponent = computed((): any => {
       <Navigation class="xs:order-1 md:-order-none" />
       <!--sidebar-->
       <Sidebar
+        :handle-conversation-change="handleConversationChange"
         class="xs:grow-1 md:grow-0 xs:overflow-y-scroll md:overflow-visible scrollbar-hidden"
       />
       <!--chat-->

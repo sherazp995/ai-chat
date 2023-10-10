@@ -4,26 +4,42 @@ const { Conversation, User } = require('../models');
 
 // Get all Conversations
 router.get('/', async (req, res) => {
-  try {
-    const conversations = await Conversation.findAll();
-    res.json({ result: conversations });
-  } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
+Conversation.findAll({
+  include: 'messages'
+})
+  .then(async (conversations) => {
+    let conversationsWithUsers = []
+    if (!!conversations && conversations.length > 0) {
+    conversationsWithUsers = await Promise.all(
+      conversations.map(async (conversation) => {
+        const contactUserObjects = await User.findAll({
+          where: {
+            id: conversation.contacts
+          },
+        });
+        conversation.contacts = contactUserObjects;
+        return conversation;
+      })
+    );
   }
+    res.json({ result: conversationsWithUsers });
+  })
+  .catch((error) => {
+    console.error('Error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  });
 });
 
 // Get a specific Conversation
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
   try {
-    const conversation = await Conversation.findByPk(id, {
-      include: 'messages',
-    });
+    const conversation = await Conversation.findByPk(id, {include: 'messages'});
     if (!conversation) {
       return res.status(404).json({ error: 'Conversation not found' });
     }
-    conversation.contacts = await User.findAll({where: {id: conversation.contacts}})
-    res.json({ result: conversation });
+    let contacts = await User.findAll({where: {id: conversation.contacts}})
+    res.json({ result: {...JSON.parse(JSON.stringify(conversation)), contacts} });
   } catch (error) {
     res.status(500).json({ error: 'Internal server error' });
   }
@@ -38,9 +54,8 @@ router.post("/new", async (req, res) => {
       include: 'messages'
     })
     let message = 'Conversation Created Successfully!';
-    console.log(message)
-    console.log(JSON.stringify(result))
-    res.json({ status: 200, result, message });
+    let contacts = await User.findAll({where: {id: result.contacts}})
+    res.json({ status: 200, result: {...JSON.parse(JSON.stringify(result)), contacts} , message });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: 'Something went wrong' });

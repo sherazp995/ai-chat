@@ -10,6 +10,7 @@ const active = ref(false);
 const props = defineProps<{
   id?: string;
   label?: string;
+  name?: string;
   value?: File;
   description?: string;
   accept?: string;
@@ -23,10 +24,7 @@ const handleFileDrop = (event: any) => {
 
 // (event) handle change when input files.
 const handleFileChange = (event: Event) => {
-  emit(
-    "valueChanged",
-    ((event.target as HTMLInputElement).files as FileList)[0]
-  );
+  emit("valueChanged", ((event.target as HTMLInputElement).files as FileList)[0]);
 };
 </script>
 
@@ -54,15 +52,14 @@ const handleFileChange = (event: Event) => {
       class="cursor-pointer w-full h-[100px] border border-dashed rounded-sm p-5 border-gray-200 dark:border-gray-500 flex justify-center items-center hover:bg-opacity-0 active:bg-opacity-0 focus:bg-opacity-0 outline-none focus:outline-none duration-500 transition-all"
       :class="{
         'bg-opacity-0': active,
-        'bg-gray-50 dark:bg-opacity-70 dark:bg-gray-700 dark:hover:bg-opacity-0 dark:focus:bg-opacity-0':
-          !active,
+        'bg-gray-50 dark:bg-opacity-70 dark:bg-gray-700 dark:hover:bg-opacity-0 dark:focus:bg-opacity-0': !active,
       }"
     >
       <!--file input-->
       <input
         type="file"
         hidden
-        name="files[]"
+        :name="!!name ? name : 'files[]'"
         :id="props.id"
         @change="handleFileChange"
         :accept="props.accept"

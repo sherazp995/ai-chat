@@ -14,6 +14,10 @@ import SearchInput from "@src/components/ui/inputs/SearchInput.vue";
 import SortedContacts from "@src/components/views/HomeView/Sidebar/Contacts/SortedContacts.vue";
 import SidebarHeader from "@src/components/views/HomeView/Sidebar/SidebarHeader.vue";
 
+const props = defineProps<{
+  handleConversationChange: (conversationId: number) => void;
+}>();
+
 const store = useStore();
 
 const searchText: Ref<string> = ref("");
@@ -24,9 +28,7 @@ const openModal = ref(false);
 const contactContainer: Ref<HTMLElement | null> = ref(null);
 
 // contact groups filtered by search text
-const filteredContactGroups: Ref<IContactGroup[] | undefined> = ref(
-  store.contactGroups
-);
+const filteredContactGroups: Ref<IContactGroup[] | undefined> = ref(store.contactGroups);
 
 // update the filtered contact groups based on the search text
 watch(searchText, () => {
@@ -34,24 +36,16 @@ watch(searchText, () => {
     ?.map((group) => {
       let newGroup = { ...group };
 
-      newGroup.contacts = newGroup.contacts.filter((contact) => {
-        if (
-          contact.firstName
-            .toLowerCase()
-            .includes(searchText.value.toLowerCase())
-        )
+      newGroup.contacts = newGroup?.contacts?.filter((contact) => {
+        if (contact.firstName.toLowerCase().includes(searchText.value.toLowerCase()))
           return true;
-        else if (
-          contact.lastName
-            .toLowerCase()
-            .includes(searchText.value.toLowerCase())
-        )
+        else if (contact.lastName.toLowerCase().includes(searchText.value.toLowerCase()))
           return true;
       });
 
       return newGroup;
     })
-    .filter((group) => group.contacts.length > 0);
+    .filter((group) => group.contacts?.length > 0);
 });
 </script>
 
@@ -69,9 +63,7 @@ watch(searchText, () => {
           title="add contacts"
           aria-label="add contacts"
         >
-          <UserPlusIcon
-            class="w-[20px] h-[20px] text-indigo-300 hover:text-indigo-400"
-          />
+          <UserPlusIcon class="w-[20px] h-[20px] text-indigo-300 hover:text-indigo-400" />
         </IconButton>
       </template>
     </SidebarHeader>
@@ -99,6 +91,7 @@ watch(searchText, () => {
           store.user &&
           store.user.contacts.length > 0
         "
+        :handle-conversation-change="handleConversationChange"
         :contactGroups="filteredContactGroups"
         :bottom-edge="(contactContainer as HTMLElement)?.getBoundingClientRect().bottom"
       />
@@ -107,9 +100,6 @@ watch(searchText, () => {
     </div>
 
     <!--add contact modal-->
-    <AddContactModal
-      :open-modal="openModal"
-      :close-modal="() => (openModal = false)"
-    />
+    <AddContactModal :open-modal="openModal" :close-modal="() => (openModal = false)" />
   </div>
 </template>
