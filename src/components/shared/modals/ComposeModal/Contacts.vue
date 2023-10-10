@@ -6,26 +6,39 @@ import Loading1 from "@src/components/states/loading-states/Loading1.vue";
 import SearchInput from "@src/components/ui/inputs/SearchInput.vue";
 import ContactItem from "@src/components/shared/blocks/ContactItem.vue";
 import ScrollBox from "@src/components/ui/utils/ScrollBox.vue";
+import { createConversation } from "@src/store/api"
 
 const store = useStore();
+const emits = defineEmits(["select-conversation"]);
 
-function addNewConversation(contact: any) {
+const props = defineProps<{
+  handleConversationChange: (conversationId: number) => void;
+}>();
+async function addNewConversation(contact: any) {
   console.log(contact);
   let conversation = store.conversations.find(
     (c: any) =>
       c.contacts.filter((u: any) => [store.user?.id, contact.id].includes(u.id)).length >
       1
   );
-  if (conversation) {
-  } else {
-    // if conversation not found. make one
-    store.conversations.push({
-      id: null,
+  console.log(conversation);
+  if (!conversation) {
+    let c = {
+      name: `${contact.firstName} ${contact.lastName}`,
       type: "couple",
       draftMessage: "",
-      contacts: [contact, store.user],
-    });
+      avatar: contact.avatar,
+      contacts: [contact.id, store.user?.id]
+    }
+    conversation = await createConversation(c);
+  console.log(conversation);
+
+    // if conversation not found. make one
+    if(!!conversation)
+    store.conversations.push(conversation);
   }
+  if(!!conversation)
+  props.handleConversationChange(conversation?.id)
 }
 </script>
 
@@ -52,7 +65,7 @@ function addNewConversation(contact: any) {
           store.user?.contacts.length > 0
         "
         v-for="(contact, index) in store.user.contacts"
-        @click="addNewConversation(contact)"
+        @contactSelected="addNewConversation"
         :key="index"
         :contact="contact"
       />

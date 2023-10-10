@@ -71,13 +71,15 @@ export const getName = (conversation: IConversation) => {
  * @param maxLength
  * @returns A string that is trimmed according the length provided
  */
-export const shorten = (message: IMessage | string, maxLength: number = 23) => {
+export const shorten = (message: IMessage | string | undefined | null, maxLength: number = 23) => {
   let text: string | IRecording | undefined;
-
-  if (typeof message === "string") {
-    text = message;
-  } else {
-    text = message.content;
+  
+  if (!!message){
+    if (typeof message === "string") {
+      text = message;
+    } else {
+      text = message.content;
+    }
   }
 
   if (text && typeof text === "string") {

@@ -64,17 +64,17 @@ const handleSelectConversation = () => {
   showContextMenu.value = false;
 
   if (props.handleConversationChange)
-    props.handleConversationChange(props.conversation.id);
+    props.handleConversationChange(props.conversation?.id);
 };
 
 // last message in conversation to display
 const lastMessage = computed(
-  () => props.conversation.messages[props.conversation.messages.length - 1]
+  () => (props?.conversation?.messages || [])[(props.conversation?.messages?.length || 0) - 1]
 );
 
 // (event) remove the unread indicator when opening the conversation
 const handleRemoveUnread = () => {
-  let index = getConversationIndex(props.conversation.id);
+  let index = getConversationIndex(props.conversation?.id);
   if (index !== undefined) {
     store.conversations[index].unread = 0;
   }
@@ -143,7 +143,7 @@ const handleRemoveUnread = () => {
             <!--recording name-->
             <Typography
               v-else-if="
-                lastMessage.type === 'recording' && lastMessage.content
+                lastMessage && (lastMessage.type === 'recording') && lastMessage.content
               "
               variant="body-2"
               class="flex justify-start items-center"

@@ -35,6 +35,19 @@ export async function users() {
     }
 }
 
+export async function createConversation(data: any) {
+    try {
+        let response = await axios.post(apiPath + `conversations/new`, data, headers())
+        if (response.status == 200) {
+            return response.data.result;
+        }
+        return false;
+    } catch (e) {
+        console.log(e);
+        return false;
+    }
+}
+
 export async function login(data: any) {
     try {
         let response = await axios.post(apiPath + `users/login`, data)

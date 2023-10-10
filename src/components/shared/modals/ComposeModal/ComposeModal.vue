@@ -8,10 +8,12 @@ import Typography from "@src/components/ui/data-display/Typography.vue";
 import Button from "@src/components/ui/inputs/Button.vue";
 import FadeTransition from "@src/components/ui/transitions/FadeTransition.vue";
 import Modal from "@src/components/ui/utils/Modal.vue";
+import { conversations } from "@src/store/defaults";
 
 const props = defineProps<{
   open: boolean;
   closeModal: () => void;
+  handleConversationChange: (conversationId: number) => void;
 }>();
 
 // the p element containing the modal title
@@ -33,6 +35,11 @@ const activeTab = computed(() => {
     return Group;
   }
 });
+
+const selectConv = (conversation: number) => {
+  props.handleConversationChange(conversation);
+  props.closeModal()
+}
 </script>
 
 <template>
@@ -103,7 +110,7 @@ const activeTab = computed(() => {
 
         <!--ActiveTab-->
         <FadeTransition>
-          <component :is="activeTab" />
+          <component :handle-conversation-change="selectConv" :is="activeTab" />
         </FadeTransition>
       </div>
     </template>

@@ -19,7 +19,7 @@ const useStore = defineStore("chat", () => {
 
   // app data refs
   // data refs
-  const user: Ref<IUser | undefined> = ref(JSON.parse(localStorage.getItem('ai-chat-user') || '{}') || defaults.user);
+  const user: Ref<IUser | undefined> = ref(JSON.parse(localStorage.getItem('ai-chat-user') || 'null') || defaults.user);
   const conversations: Ref<IConversation[]> = ref(defaults.conversations || []);
   const settings: Ref<ISettings> = ref(
     storage.settings || defaults.defaultSettings

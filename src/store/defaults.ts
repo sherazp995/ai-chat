@@ -11,20 +11,23 @@ export const defaultSettings = [
   },
 ];
 
+let u = JSON.parse(localStorage.getItem('ai-chat-user') || '{}');
 export const user = {
-  ...JSON.parse(localStorage.getItem('ai-chat-user') || '{}'), 
-  contacts: (await users())
+  ...u, 
+  contacts: (await users()).filter(function (contact): boolean {
+    return (contact.id !== u.id);
+  })
 };
 
 
 export const conversations = [
   {
-    id: 1,
+    id: 35,
     type: "couple",
     draftMessage: "",
     contacts: [
       {
-        id: 6,
+        id: 12,
         email: "user@gmail.com",
         firstName: "Elijah",
         lastName: "Sabrina",
@@ -33,7 +36,7 @@ export const conversations = [
           "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
       },
       {
-        id: 1,
+        id: 13,
         firstName: "Dawn",
         lastName: "Sabrina",
         lastSeen: new Date(),
@@ -109,7 +112,7 @@ export const conversations = [
         id: 5,
         content: "Lorem ipsum dolor sit amet.",
         date: "5:00 pm",
-        state: "delivered",
+        state: "waiting",
         sender: {
           id: 1,
           firstName: "Dawn",
@@ -125,12 +128,12 @@ export const conversations = [
   },
 
   {
-    id: 2,
+    id: 36,
     type: "couple",
     draftMessage: "",
     contacts: [
       {
-        id: 5,
+        id: 14,
         email: "user@gmail.com",
         firstName: "Dylan",
         lastName: "Billy",
@@ -139,7 +142,7 @@ export const conversations = [
           "https://images.unsplash.com/photo-1522556189639-b150ed9c4330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
       },
       {
-        id: 1,
+        id: 15,
         firstName: "Dawn",
         lastName: "Sabrina",
         lastSeen: new Date(),
@@ -259,7 +262,7 @@ export const conversations = [
   },
 
   {
-    id: 6,
+    id: 37,
     type: "group",
     name: "Design Team",
     avatar:
@@ -268,7 +271,7 @@ export const conversations = [
     draftMessage: "",
     contacts: [
       {
-        id: 1,
+        id: 16,
         firstName: "Dawn",
         lastName: "Sabrina",
         lastSeen: new Date(),
@@ -277,7 +280,7 @@ export const conversations = [
           "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
       },
       {
-        id: 2,
+        id: 24,
         email: "user@gmail.com",
         firstName: "Ahmed",
         lastName: "Ali",
@@ -286,7 +289,7 @@ export const conversations = [
           "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
       },
       {
-        id: 3,
+        id: 36,
         email: "user@gmail.com",
         firstName: "Allen",
         lastName: "Carr",

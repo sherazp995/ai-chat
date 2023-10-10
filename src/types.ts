@@ -46,18 +46,18 @@ export interface IMessage {
 }
 
 export interface IConversation {
-  id: number;
-  type: string;
+  id?: number;
+  type?: string;
   name?: string;
   avatar?: string;
   admins?: number[];
   contacts?: IContact[];
-  messages: IMessage[];
+  messages?: IMessage[];
   pinnedMessage?: IMessage;
   pinnedMessageHidden?: boolean;
   replyMessage?: IMessage;
   unread?: number;
-  draftMessage: string;
+  draftMessage?: string;
 }
 
 export interface IContactGroup {

@@ -124,6 +124,6 @@ const addNewConversation = () => {
     </div>
 
     <!--compose modal-->
-    <ComposeModal :open="composeOpen" :close-modal="closeComposeModal" />
+    <ComposeModal :handle-conversation-change="handleConversationChange" :open="composeOpen" :close-modal="closeComposeModal" />
   </div>
 </template>

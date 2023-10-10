@@ -2,7 +2,7 @@ require("dotenv").config();
 const express = require('express');
 const cors = require('cors');
 const auth = require("./services/authentication");
-const {users} = require('./routes');
+const routes = require('./routes');
 const { initializeSocket } = require('./services/socket')
 const app = express();
 
@@ -12,10 +12,10 @@ const httpServer = require("http").createServer(app);
 const PORT = process.env.PORT || 3000;
 
 app.use(cors());
-app.use(express.json())
+app.use(express.json());
 app.use(auth);
 app.set('port', PORT);
-app.use('/users', users);
+app.use(routes);
 
 initializeSocket(httpServer);
 

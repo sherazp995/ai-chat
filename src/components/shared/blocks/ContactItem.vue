@@ -74,7 +74,7 @@ const store = useStore();
         </div>
 
         <!--contact last seen-->
-        <Typography variant="body-2"> Last seen 2:30 am </Typography>
+        <!-- <Typography variant="body-2"> Last seen 2:30 am </Typography> -->
       </div>
 
       <div class="h-full flex flex-col justify-center items-center">

@@ -37,7 +37,7 @@ const handleSelectMessage = (messageId: number) => {
 
   if (
     activeConversation.value &&
-    selectedMessages.value.length === activeConversation.value.messages.length
+    selectedMessages.value.length === activeConversation.value?.messages?.length
   ) {
     selectAll.value = true;
   }
@@ -62,9 +62,9 @@ const handleDeselectMessage = (messageId: number) => {
 // (event) select all messages.
 const handleSelectAll = () => {
   if (activeConversation.value) {
-    const messages = activeConversation.value.messages.map(
+    const messages = activeConversation.value?.messages?.map(
       (message) => message.id
-    );
+    ) || [];
     selectedMessages.value = messages;
     selectAll.value = true;
   }
