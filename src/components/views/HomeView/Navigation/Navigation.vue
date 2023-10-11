@@ -90,7 +90,10 @@ const handleActiveSidebarComponentChange = (value: string) => {
             <NavLink
               :icon="store.settings.darkMode ? SunIcon : MoonIcon"
               title="Night mode"
-              @click="store.settings.darkMode = !store.settings.darkMode"
+              @click="() => {
+                store.settings.darkMode = !store.settings.darkMode;
+                console.log(store.settings)
+              }"
             />
           </li>
           <!--settings button-->

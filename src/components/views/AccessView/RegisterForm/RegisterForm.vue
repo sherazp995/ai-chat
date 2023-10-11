@@ -1,15 +1,16 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import { RouterLink, useRouter } from "vue-router";
+import { RouterLink } from "vue-router";
 
 import SlideTransition from "@src/components/ui/transitions/SlideTransition.vue";
 import Typography from "@src/components/ui/data-display/Typography.vue";
 import PasswordSection from "@src/components/views/AccessView/RegisterForm/PasswordSection.vue";
 import PersonalSection from "@src/components/views/AccessView/RegisterForm/PersonalSection.vue";
 import { signup } from "@src/store/api";
+import router from "@src/router";
 
 defineEmits(["activeSectionChange"]);
-const router = useRouter();
+
 const formData = ref({});
 // determines what form section to use.
 const activeSectionName = ref("personal-section");

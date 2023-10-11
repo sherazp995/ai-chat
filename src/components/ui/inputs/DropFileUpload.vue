@@ -12,6 +12,7 @@ const props = defineProps<{
   label?: string;
   name?: string;
   value?: File;
+  model?: string,
   description?: string;
   accept?: string;
 }>();
@@ -24,7 +25,7 @@ const handleFileDrop = (event: any) => {
 
 // (event) handle change when input files.
 const handleFileChange = (event: Event) => {
-  emit("valueChanged", ((event.target as HTMLInputElement).files as FileList)[0]);
+  emit("valueChanged", {model: props.model, value: ((event.target as HTMLInputElement).files as FileList)[0]});
 };
 </script>
 

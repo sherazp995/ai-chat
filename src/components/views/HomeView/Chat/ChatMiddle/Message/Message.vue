@@ -132,7 +132,21 @@ const replyMessage = getMessageById(activeConversation, props.message.replyTo);
             noColor
             v-if="props.message.content && props.message.type !== 'recording'"
             class="outline-none text-black opacity-60 dark:text-white dark:opacity-70"
-            v-html="linkifyStr((props.message.content as string), {
+            v-html="'User: ' + linkifyStr((props.message.content as string), {
+                            className: props.self ? 'text-black opacity-50' : 'text-indigo-500 dark:text-indigo-300',
+                            format: { url: (value) => value.length > 50 ? value.slice(0, 50) + `…` : value }
+                        })"
+            tabindex="0"
+          >
+          </Typography>
+
+          <!--content-->
+          <Typography
+            variant="body-2"
+            noColor
+            v-if="props.message.aiResponse"
+            class="outline-none text-black opacity-60 dark:text-white dark:opacity-70"
+            v-html="'AI-Response: ' + linkifyStr((props.message.aiResponse as string), {
                             className: props.self ? 'text-black opacity-50' : 'text-indigo-500 dark:text-indigo-300',
                             format: { url: (value) => value.length > 50 ? value.slice(0, 50) + `…` : value }
                         })"

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { Message, User } = require('../models');
+const { Message } = require('../models');
+const { runPrompt } = require('../services/openai')
 
 // Get all Messages
 router.get('/', async (req, res) => {
@@ -13,6 +14,20 @@ router.get('/', async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
+// Get all Messages by Conversation
+router.get('/conversation/:id', async (req, res) => {
+  try {
+    const messages = await Message.findAll({
+      where: {conversationId: req.params.id},
+      include: 'sender'
+    });
+    res.json({ result: messages });
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 
 // Get a specific Message
 router.get('/:id', async (req, res) => {
@@ -34,6 +49,7 @@ router.get('/:id', async (req, res) => {
 router.post("/new", async (req, res) => {
   try {
     let message = req.body;
+    // message.aiResponse = await runPrompt(message.content);
     console.log(message);
     let c = await Message.create(message);
     let result = await Message.findByPk(c.id, {

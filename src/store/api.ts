@@ -48,6 +48,18 @@ export async function createConversation(data: any) {
     }
 }
 
+export async function getConversation(conversationId: any) {
+    try {
+        let response = await axios.get(apiPath + `conversations/${conversationId}`, headers())
+        if (!!response.data.result) {
+            return response.data.result;
+        }
+        return [];
+    } catch (e) {
+        console.log(e);
+        return [];
+    }
+}
 export async function allConversations() {
     try {
         let response = await axios.get(apiPath + `conversations`, headers())
@@ -74,9 +86,9 @@ export async function createMessage(data: any) {
     }
 }
 
-export async function allMessages() {
+export async function allMessages(conversationId: any = null) {
     try {
-        let response = await axios.get(apiPath + `messages`, headers())
+        let response = await axios.get(apiPath + `messages` + (conversationId ? `/conversation/${conversationId}` : ''), headers())
         if (!!response.data.result) {
             return response.data.result;
         }

@@ -35,15 +35,6 @@ async function addNewConversation(contact: any) {
   if (!!conversation) props.handleConversationChange(conversation?.id);
 }
 
-// function filterContactWithConversation(){
-//   .filter((c) => {
-//           !store.conversations.find((conv: any) => {
-//             const a = conv.contacts.sort()
-//             const b = [c.id, store.user?.id].sort()
-//             return (conv.type === 'couple' &&  a == b)
-//           })
-//         })
-// }
 </script>
 
 <template>

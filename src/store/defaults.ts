@@ -1,15 +1,13 @@
 import { users, allConversations } from "./api";
 
-export const defaultSettings = [
-  {
-    lastSeen: false,
-    readReceipt: false,
-    joiningGroups: false,
-    privateMessages: false,
-    darkMode: false,
-    borderedTheme: false,
-  },
-];
+export const defaultSettings = {
+  lastSeen: false,
+  readReceipt: false,
+  joiningGroups: false,
+  privateMessages: false,
+  darkMode: false,
+  borderedTheme: false,
+};
 
 let u = JSON.parse(localStorage.getItem('ai-chat-user') || '{}');
 export const user = {
@@ -19,7 +17,7 @@ export const user = {
   })
 };
 
-export const conversations = await allConversations()
+export const conversations = await allConversations();
 
 export const fetchData = async () => {
   return await {

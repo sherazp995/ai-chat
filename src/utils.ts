@@ -12,7 +12,7 @@ import useStore from "@src/store/store";
  * @returns A string the combines the first and last names.
  */
 export const getFullName = (contact: IContact) => {
-  return contact.firstName + " " + contact.lastName;
+  return contact?.firstName + " " + contact?.lastName;
 };
 
 /**

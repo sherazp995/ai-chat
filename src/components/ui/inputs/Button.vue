@@ -11,6 +11,7 @@ const props = defineProps<{
   color?: string;
   link?: boolean;
   class?: string;
+  disable?: boolean;
   typography?: string;
 }>();
 
@@ -104,6 +105,7 @@ const classes = twMerge(baseClasses, variantClasses.value.button, props.class);
 <template>
   <component
     :is="link ? RouterLink : 'button'"
+    :disabled="disable"
     @click="$emit('button-clicked', $event)"
     tabindex="0"
     :class="classes"

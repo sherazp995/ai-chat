@@ -4,10 +4,10 @@ import { ref } from "vue";
 import Typography from "@src/components/ui/data-display/Typography.vue";
 import Button from "@src/components/ui/inputs/Button.vue";
 import TextInput from "@src/components/ui/inputs/TextInput.vue";
-import { RouterLink, useRouter } from "vue-router";
+import { RouterLink } from "vue-router";
 import { login } from "@src/store/api";
+import router from "@src/router";
 
-const router = useRouter();
 const email = ref("");
 const password = ref("");
 

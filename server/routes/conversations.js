@@ -4,9 +4,7 @@ const { Conversation, User } = require('../models');
 
 // Get all Conversations
 router.get('/', async (req, res) => {
-Conversation.findAll({
-  include: 'messages'
-})
+Conversation.findAll()
   .then(async (conversations) => {
     let conversationsWithUsers = []
     if (!!conversations && conversations.length > 0) {
@@ -17,7 +15,7 @@ Conversation.findAll({
             id: conversation.contacts
           },
         });
-        conversation.contacts = contactUserObjects;
+        conversation = {...JSON.parse(JSON.stringify(conversation)), contacts: contactUserObjects, messages: []};
         return conversation;
       })
     );
@@ -49,6 +47,7 @@ router.get('/:id', async (req, res) => {
 router.post("/new", async (req, res) => {
   try {
     let conversation = req.body;
+    console.log(req.body);
     let c = await Conversation.create(conversation);
     let result = await Conversation.findByPk(c.id, {
       include: 'messages'

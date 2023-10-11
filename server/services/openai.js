@@ -1,8 +1,12 @@
-const { OpenAI } = require("openai");
+const { Configuration, OpenAIApi } = require("openai");
 
-const openai = new OpenAI({
+
+
+const config = new Configuration({
 	apiKey: process.env.OPEN_AI_KEY,
 });
+
+const openai = new OpenAIApi(config);
 
 const runPrompt = async (prompt) => {
 	const response = await openai.createCompletion({
@@ -16,5 +20,5 @@ const runPrompt = async (prompt) => {
 };
 
 module.exports = {
-    runPrompt,
+	runPrompt
 }

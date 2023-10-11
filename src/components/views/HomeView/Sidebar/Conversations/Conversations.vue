@@ -40,7 +40,7 @@ watch([keyword], () => {
 const handleConversationChange = async (conversationId: number) => {
   store.activeConversationId = conversationId;
   const index = getConversationIndex(conversationId);
-  store.conversations[index].messages = await allMessages();
+  store.conversations[index].messages = await allMessages(conversationId);
   store.conversationOpen = "open";
 };
 

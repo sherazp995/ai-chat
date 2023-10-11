@@ -15,6 +15,9 @@ module.exports = {
       content: {
         type: Sequelize.STRING
       },
+      aiResponse: {
+        type: Sequelize.STRING
+      },
       date: {
         type: Sequelize.STRING
       },

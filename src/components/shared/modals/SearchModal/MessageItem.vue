@@ -15,7 +15,7 @@ const props = defineProps<{
     <!--profile image-->
     <div class="mr-4">
       <div
-        :style="{ backgroundImage: `url(${props.message.sender.avatar})` }"
+        :style="{ backgroundImage: `url(${props.message.sender?.avatar})` }"
         class="w-7 h-7 rounded-full bg-cover bg-center"
       ></div>
     </div>
