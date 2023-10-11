@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { Message } = require('../models');
 const { runPrompt } = require('../services/openai')
+const { getIO } = require('../services/socket')
 
 // Get all Messages
 router.get('/', async (req, res) => {
@@ -50,11 +51,12 @@ router.post("/new", async (req, res) => {
   try {
     let message = req.body;
     // message.aiResponse = await runPrompt(message.content);
-    console.log(message);
+    message.state = 'sent'
     let c = await Message.create(message);
     let result = await Message.findByPk(c.id, {
       include: 'sender'
     })
+    getIO().emit('conversation', {message: result});
     res.json({ status: 200, result, message: 'Message Created Successfully!' });
   } catch (error) {
     console.log(error);

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Conversation, User } = require('../models');
+const { Conversation, User, Message } = require('../models');
 
 // Get all Conversations
 router.get('/', async (req, res) => {
@@ -15,7 +15,12 @@ Conversation.findAll()
             id: conversation.contacts
           },
         });
-        conversation = {...JSON.parse(JSON.stringify(conversation)), contacts: contactUserObjects, messages: []};
+        let messages = await Message.findAll({
+          where: {conversationId: conversation.id},
+          order: [['updatedAt', 'DESC']],
+          limit: 1,
+        })
+        conversation = {...JSON.parse(JSON.stringify(conversation)), contacts: contactUserObjects, messages};
         return conversation;
       })
     );

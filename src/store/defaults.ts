@@ -9,7 +9,10 @@ export const defaultSettings = {
   borderedTheme: false,
 };
 
-let u = JSON.parse(localStorage.getItem('ai-chat-user') || '{}');
+let u = JSON.parse(localStorage.getItem('ai-chat-user') || 'null');
+if (!u && location.pathname == '/'){
+  location.pathname = '/access/sign-in'
+}
 export const user = {
   ...u, 
   contacts: (await users()).filter(function (contact: any): boolean {
@@ -19,8 +22,8 @@ export const user = {
 
 export const conversations = await allConversations();
 
-export const fetchData = async () => {
-  return await {
+export const fetchData = () => {
+  return {
     data: {
       user: user,
       conversations: conversations,

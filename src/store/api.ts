@@ -10,23 +10,31 @@ export function setAuthHeaders() {
 }
 
 function headers() {
-    const config = {
-        headers: {
-            'accesstoken': localStorage.getItem('ai-chat-api'),
-        }
-    };
-    return config
+    if (localStorage.getItem('ai-chat-api')) {
+        const config = {
+            headers: {
+                'accesstoken': localStorage.getItem('ai-chat-api'),
+            }
+        };
+        return config;
+    } else {
+        return false;
+    }
 }
 
 export function deleteAuthHeaders() {
-    // delete axios.default.headers.accesstoken
+    localStorage.removeItem('ai-chat-api');
+    localStorage.removeItem('ai-chat-user');
 }
 
 export async function users() {
     try {
-        let response = await axios.get(apiPath + `users`, headers())
-        if (response.status == 200) {
-            return response.data.result;
+        let h = headers();
+        if (h){
+            let response = await axios.get(apiPath + `users`, h)
+            if (response.status == 200) {
+                return response.data.result;
+            }
         }
         return [];
     } catch (e) {
@@ -37,9 +45,28 @@ export async function users() {
 
 export async function createConversation(data: any) {
     try {
-        let response = await axios.post(apiPath + `conversations/new`, data, headers())
-        if (response.status == 200) {
-            return response.data.result;
+        let h = headers();
+        if (h){
+            let response = await axios.post(apiPath + `conversations/new`, data, h)
+            if (response.status == 200) {
+                return response.data.result;
+            }
+        }
+        return false;
+    } catch (e) {
+        console.log(e);
+        return false;
+    }
+}
+
+export async function getSingleConversation(id: any) {
+    try {
+        let h = headers();
+        if (h){
+            let response = await axios.get(apiPath + `conversations/` + id, h)
+            if (response.status == 200) {
+                return response.data.result;
+            }
         }
         return false;
     } catch (e) {
@@ -50,9 +77,12 @@ export async function createConversation(data: any) {
 
 export async function getConversation(conversationId: any) {
     try {
-        let response = await axios.get(apiPath + `conversations/${conversationId}`, headers())
-        if (!!response.data.result) {
-            return response.data.result;
+        let h = headers();
+        if (h){
+            let response = await axios.get(apiPath + `conversations/${conversationId}`, h)
+            if (!!response.data.result) {
+                return response.data.result;
+            }
         }
         return [];
     } catch (e) {
@@ -62,9 +92,12 @@ export async function getConversation(conversationId: any) {
 }
 export async function allConversations() {
     try {
-        let response = await axios.get(apiPath + `conversations`, headers())
-        if (!!response.data.result) {
-            return response.data.result;
+        let h = headers();
+        if (h){
+            let response = await axios.get(apiPath + `conversations`, h)
+            if (!!response.data.result) {
+                return response.data.result;
+            }
         }
         return [];
     } catch (e) {
@@ -75,9 +108,12 @@ export async function allConversations() {
 
 export async function createMessage(data: any) {
     try {
-        let response = await axios.post(apiPath + `messages/new`, data, headers())
-        if (response.status == 200) {
-            return response.data.result;
+        let h = headers();
+        if (h){
+            let response = await axios.post(apiPath + `messages/new`, data, h)
+            if (response.status == 200) {
+                return response.data.result;
+            }
         }
         return false;
     } catch (e) {
@@ -88,9 +124,12 @@ export async function createMessage(data: any) {
 
 export async function allMessages(conversationId: any = null) {
     try {
-        let response = await axios.get(apiPath + `messages` + (conversationId ? `/conversation/${conversationId}` : ''), headers())
-        if (!!response.data.result) {
-            return response.data.result;
+        let h = headers();
+        if (h){
+            let response = await axios.get(apiPath + `messages` + (conversationId ? `/conversation/${conversationId}` : ''), h)
+            if (!!response.data.result) {
+                return response.data.result;
+            }
         }
         return [];
     } catch (e) {

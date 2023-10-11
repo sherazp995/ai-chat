@@ -132,7 +132,7 @@ const replyMessage = getMessageById(activeConversation, props.message.replyTo);
             noColor
             v-if="props.message.content && props.message.type !== 'recording'"
             class="outline-none text-black opacity-60 dark:text-white dark:opacity-70"
-            v-html="'User: ' + linkifyStr((props.message.content as string), {
+            v-html="getFullName(props.message.sender) + ': ' + linkifyStr((props.message.content as string), {
                             className: props.self ? 'text-black opacity-50' : 'text-indigo-500 dark:text-indigo-300',
                             format: { url: (value) => value.length > 50 ? value.slice(0, 50) + `…` : value }
                         })"

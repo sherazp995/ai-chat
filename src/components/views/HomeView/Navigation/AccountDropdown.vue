@@ -9,7 +9,7 @@ import {
 import Dropdown from "@src/components/ui/navigation/Dropdown/Dropdown.vue";
 import DropdownLink from "@src/components/ui/navigation/Dropdown/DropdownLink.vue";
 import { RouterLink } from "vue-router";
-
+import { deleteAuthHeaders } from "@src/store/api";
 const props = defineProps<{
   showDropdown: boolean;
   handleCloseDropdown: () => void;
@@ -29,6 +29,11 @@ const handleCloseOnClickOutside = (event: Event) => {
     props.handleCloseDropdown();
   }
 };
+
+const logout = () => {
+  deleteAuthHeaders();
+  props.handleCloseDropdown()
+}
 </script>
 
 <template>
@@ -94,7 +99,7 @@ const handleCloseOnClickOutside = (event: Event) => {
 
       <DropdownLink
         label="Logout"
-        :handle-click="props.handleCloseDropdown"
+        :handle-click="logout"
         color="danger"
       >
         <RouterLink

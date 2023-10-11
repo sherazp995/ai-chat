@@ -10,15 +10,16 @@ import Sidebar from "@src/components/views/HomeView/Sidebar/Sidebar.vue";
 import NoChatSelected from "@src/components/states/empty-states/NoChatSelected.vue";
 import Loading3 from "@src/components/states/loading-states/Loading3.vue";
 import FadeTransition from "@src/components/ui/transitions/FadeTransition.vue";
-import { allMessages } from "@src/store/api";
+import { allMessages, getSingleConversation } from "@src/store/api";
 import { getConversationIndex } from "@src/utils";
-import { io } from "socket.io-client";
-import { onMounted } from "vue";
+import { onMounted, onUnmounted } from "vue";
+import socket from "@src/socket";
+import router from "@src/router";
+import { fetchData } from "@src/store/defaults";
 
-const store = useStore();
-const URL = "http://localhost:3000";
 
-const socket: Ref<any> = ref(null);
+let store = useStore();
+
 // the active chat component or loading component.
 const activeChatComponent = computed((): any => {
   if (store.status === "loading" || store.delayLoading) {
@@ -40,12 +41,31 @@ const handleConversationChange = async (conversationId: number) => {
 };
 
 onMounted(() => {
-  socket.value = io(URL);
-
-  socket.value.onAny((event: any, ...args: any) => {
-    console.log(event, args);
-  });
+  socket.connect();
+  
+  store = {...store, ...(fetchData()).data}
+  if(!store.user){
+    router.push('/access/sign-in')
+  }
+  socket.on('conversation', async (event) => {
+    if (event.message.sender.id !== store.user?.id) {
+      const index = getConversationIndex(event.message.conversationId);
+      if (index >= 0) {
+        store.conversations[index].unread = (store.conversations[index].unread || 0) + 1
+        store.conversations[index].messages?.push(event.message);
+      } else {
+        let conv = await getSingleConversation(event.message.conversationId);
+        conv.unread = 1;
+        store.conversations.push(conv);
+      }
+    }
+  })
 });
+
+onUnmounted(() => {
+    socket.off("conversation");
+})
+
 </script>
 
 <template>
