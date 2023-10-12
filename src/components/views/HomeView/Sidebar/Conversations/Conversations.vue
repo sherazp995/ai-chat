@@ -38,9 +38,9 @@ watch([keyword], () => {
 
 // (event) switch between the rendered conversations.
 const handleConversationChange = async (conversationId: number) => {
-  store.activeConversationId = conversationId;
   const index = getConversationIndex(conversationId);
   store.conversations[index].messages = await allMessages(conversationId);
+  store.activeConversationId = conversationId;
   store.conversationOpen = "open";
 };
 

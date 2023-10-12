@@ -18,6 +18,10 @@ module.exports = {
       type: {
         type: Sequelize.ENUM('group', 'couple')
       },
+      unread: {
+        type: Sequelize.INTEGER,
+        defaultValue: 0
+      },
       draftMessage: {
         type: Sequelize.STRING
       },

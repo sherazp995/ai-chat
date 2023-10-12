@@ -22,6 +22,7 @@ module.exports = (sequelize, DataTypes) => {
     avatar: DataTypes.STRING,
     type: DataTypes.ENUM('group', 'couple'),
     draftMessage: DataTypes.STRING,
+    unread: DataTypes.INTEGER,
     admins: DataTypes.ARRAY(DataTypes.INTEGER),
     contacts: DataTypes.ARRAY(DataTypes.INTEGER)
   }, {

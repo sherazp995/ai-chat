@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 import useStore from "@src/store/store";
 import type { Ref } from "vue";
 import { computed, ref } from "vue";
@@ -15,8 +14,6 @@ import { getConversationIndex } from "@src/utils";
 import { onMounted, onUnmounted } from "vue";
 import socket from "@src/socket";
 import router from "@src/router";
-import { fetchData } from "@src/store/defaults";
-
 
 let store = useStore();
 
@@ -42,16 +39,15 @@ const handleConversationChange = async (conversationId: number) => {
 
 onMounted(() => {
   socket.connect();
-  
-  store = {...store, ...(fetchData()).data}
-  if(!store.user){
-    router.push('/access/sign-in')
-  }
-  socket.on('conversation', async (event) => {
+
+  // if(!store.user?.id){
+  //   router.push('/access/sign-in')
+  // }
+  socket.on("conversation", async (event) => {
     if (event.message.sender.id !== store.user?.id) {
       const index = getConversationIndex(event.message.conversationId);
       if (index >= 0) {
-        store.conversations[index].unread = (store.conversations[index].unread || 0) + 1
+        store.conversations[index].unread = (store.conversations[index].unread || 0) + 1;
         store.conversations[index].messages?.push(event.message);
       } else {
         let conv = await getSingleConversation(event.message.conversationId);
@@ -59,30 +55,37 @@ onMounted(() => {
         store.conversations.push(conv);
       }
     }
-  })
+  });
 });
 
 onUnmounted(() => {
-    socket.off("conversation");
-})
-
+  socket.off("conversation");
+});
 </script>
 
 <template>
   <KeepAlive>
-    <div class="xs:relative md:static h-full flex xs:flex-col md:flex-row overflow-hidden">
+    <div
+      class="xs:relative md:static h-full flex xs:flex-col md:flex-row overflow-hidden"
+    >
       <!--navigation-bar-->
       <Navigation class="xs:order-1 md:-order-none" />
       <!--sidebar-->
-      <Sidebar :handle-conversation-change="handleConversationChange"
-        class="xs:grow-1 md:grow-0 xs:overflow-y-scroll md:overflow-visible scrollbar-hidden" />
+      <Sidebar
+        :handle-conversation-change="handleConversationChange"
+        class="xs:grow-1 md:grow-0 xs:overflow-y-scroll md:overflow-visible scrollbar-hidden"
+      />
       <!--chat-->
-      <div id="mainContent"
+      <div
+        id="mainContent"
         class="xs:absolute xs:z-10 md:static grow h-full xs:w-full md:w-fit scrollbar-hidden bg-white dark:bg-gray-800 transition-all duration-500"
-        :class="store.conversationOpen === 'open'
+        :class="
+          store.conversationOpen === 'open'
             ? ['xs:left-[0px]', 'xs:static']
             : ['xs:left-[1000px]']
-          " role="region">
+        "
+        role="region"
+      >
         <FadeTransition name="fade" mode="out-in">
           <component :is="activeChatComponent" :key="store.activeConversationId" />
         </FadeTransition>

@@ -7,6 +7,10 @@ import TextInput from "@src/components/ui/inputs/TextInput.vue";
 import { RouterLink } from "vue-router";
 import { login } from "@src/store/api";
 import router from "@src/router";
+import { fetchData } from "@src/store/defaults";
+import useStore from "@src/store/store";
+
+let store = useStore();
 
 const email = ref("");
 const password = ref("");
@@ -23,7 +27,10 @@ async function onSubmit() {
     email: email.value,
     password: password.value,
   };
-  (await login(formData)) && router.push("/");
+  if (await login(formData)) {
+    store = { ...store, ...fetchData().data };
+    router.push("/");
+  }
 }
 </script>
 

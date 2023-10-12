@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Message } = require('../models');
+const { Message, Conversation, sequelize } = require('../models');
 const { runPrompt } = require('../services/openai')
 const { getIO } = require('../services/socket')
 
@@ -19,8 +19,13 @@ router.get('/', async (req, res) => {
 // Get all Messages by Conversation
 router.get('/conversation/:id', async (req, res) => {
   try {
+    let conversationId = req.params.id;
+    Conversation.update(
+      { unread: 0 },
+      { where: { id: conversationId } }
+    )
     const messages = await Message.findAll({
-      where: {conversationId: req.params.id},
+      where: { conversationId: conversationId },
       include: 'sender'
     });
     res.json({ result: messages });
@@ -50,12 +55,13 @@ router.get('/:id', async (req, res) => {
 router.post("/new", async (req, res) => {
   try {
     let message = req.body;
-    // message.aiResponse = await runPrompt(message.content);
+    message.aiResponse = await runPrompt(message.content);
     message.state = 'sent'
     let c = await Message.create(message);
     let result = await Message.findByPk(c.id, {
       include: 'sender'
     })
+    await Conversation.update({ unread: sequelize.literal('unread + 1') }, { where: { id: message.conversationId } });
     getIO().emit('conversation', {message: result});
     res.json({ status: 200, result, message: 'Message Created Successfully!' });
   } catch (error) {

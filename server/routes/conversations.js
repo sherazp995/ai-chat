@@ -37,7 +37,7 @@ Conversation.findAll()
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
   try {
-    const conversation = await Conversation.findByPk(id, {include: 'messages'});
+    const conversation = await Conversation.findByPk(id, { include: 'messages' });
     if (!conversation) {
       return res.status(404).json({ error: 'Conversation not found' });
     }

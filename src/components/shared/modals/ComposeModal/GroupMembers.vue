@@ -21,6 +21,7 @@ const props = defineProps<{
 
 // a list of contacts selected to make a call
 const selectedContacts: Ref<IContact[]> = ref([]);
+const limitReached = ref(false);
 
 // checks whether a contact is selected or not
 const isContactSelected = (contact: IContact) => {
@@ -36,8 +37,13 @@ const handleSelectedContactsChange = (contact: IContact) => {
   let contactIndex = selectedContacts.value.findIndex((item) => item.id === contact.id);
   if (contactIndex !== -1) {
     selectedContacts.value.splice(contactIndex, 1);
+    limitReached.value = false;
   } else {
-    selectedContacts.value.push(contact);
+    if ((selectedContacts.value?.length || 0) > 6) {
+      limitReached.value = true;
+    } else {
+      selectedContacts.value.push(contact);
+    }
   }
 };
 
@@ -51,6 +57,11 @@ function onSubmit() {
     <!--search-->
     <div class="mx-5 mt-3 mb-5">
       <SearchInput />
+    </div>
+
+    <!--limit reached-->
+    <div v-if="limitReached" class="mx-5 mt-3 mb-5" style="color: red">
+      Maximum Contacts are selected.
     </div>
 
     <!--contacts-->
