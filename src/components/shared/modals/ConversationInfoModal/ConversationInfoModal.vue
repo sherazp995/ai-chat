@@ -10,7 +10,8 @@ import Members from "@src/components/shared/modals/ConversationInfoModal/Members
 import Modal from "@src/components/ui/utils/Modal.vue";
 import SlideTransition from "@src/components/ui/transitions/SlideTransition.vue";
 
-defineEmits(["activePageChange"]);
+
+const emits = defineEmits(['activePageChange', 'conversationChange'])
 
 const props = defineProps<{
   open: boolean;
@@ -53,6 +54,10 @@ const changeActiveTab = (event: {
     selectedMember.value = undefined;
   }
 };
+
+const conversationChange = (data: any) => {
+  emits('conversationChange', data);
+}
 </script>
 
 <template>
@@ -66,6 +71,7 @@ const changeActiveTab = (event: {
               @active-page-change="changeActiveTab"
               :is="ActivePage"
               :conversation="props.conversation"
+              @conversation-change="conversationChange"
               :close-modal="props.closeModal"
               :key="activePageName"
               :contact="selectedMember"

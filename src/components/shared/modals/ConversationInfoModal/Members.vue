@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { IConversation, IUser } from "@src/types";
-import type { Ref } from "vue";
+import type { Ref, defineEmits } from "vue";
 import { ref } from "vue";
 
 import useStore from "@src/store/store";
@@ -14,14 +14,18 @@ import SearchInput from "@src/components/ui/inputs/SearchInput.vue";
 import Dropdown from "@src/components/ui/navigation/Dropdown/Dropdown.vue";
 import DropdownLink from "@src/components/ui/navigation/Dropdown/DropdownLink.vue";
 import ScrollBox from "@src/components/ui/utils/ScrollBox.vue";
+import { removeFromConversation } from "@src/store/api";
+import { getConversationIndex } from "@src/utils";
 
 const props = defineProps<{
   closeModal: () => void;
   conversation: IConversation;
 }>();
 
+const emits = defineEmits(['active-page-change', 'conversationChange'])
 const store = useStore();
 
+const contacts = ref(props.conversation.contacts)
 // html container of the contacts list
 const contactContainer: Ref<HTMLElement | undefined> = ref();
 
@@ -78,6 +82,19 @@ const handleClickOutside = (event: Event) => {
     closeDropdowns();
   }
 };
+
+const removeFromGroup = async (c : any) => {
+  let data: any = {
+    id: props.conversation.id,
+    userId: c
+  }
+  let conv = await removeFromConversation(data);
+  let index;
+  conv && (index = getConversationIndex(conv.id));
+  contacts.value = conv?.contacts;
+  index && (store.conversations[index] = conv);
+  emits('conversationChange', { conversation: conv })
+}
 </script>
 
 <template>
@@ -105,9 +122,9 @@ const handleClickOutside = (event: Event) => {
     </div>
 
     <!--search-->
-    <div class="mb-5 mx-5">
+    <!-- <div class="mb-5 mx-5">
       <SearchInput />
-    </div>
+    </div> -->
 
     <!--contacts-->
     <div ref="contactContainer">
@@ -116,13 +133,13 @@ const handleClickOutside = (event: Event) => {
           variant="card"
           @contact-selected="
             (contact) =>
-              $emit('active-page-change', {
+              {/* $emit('active-page-change', {
                 tabName: 'conversation-info',
                 animationName: 'slide-left',
                 contact: contact,
-              })
+              }) */}
           "
-          v-for="(contact, index) in props.conversation.contacts"
+          v-for="(contact, index) in contacts"
           :contact="contact"
           :key="index"
         >
@@ -161,11 +178,11 @@ const handleClickOutside = (event: Event) => {
                 :show="(dropdownMenuStates as boolean[])[index]"
                 :position="dropdownMenuPosition"
               >
-                <DropdownLink> Promote to admin </DropdownLink>
+                <!-- <DropdownLink v-if="!props.conversation.admins?.includes(contact.id)"> Promote to admin </DropdownLink> -->
 
-                <DropdownLink> Demote to member </DropdownLink>
+                <!-- <DropdownLink v-if="props.conversation.admins?.includes(contact.id)"> Demote to member </DropdownLink> -->
 
-                <DropdownLink color="danger"> Remove contact </DropdownLink>
+                <DropdownLink color="danger" @click="removeFromGroup(contact.id)"> Remove contact </DropdownLink>
               </Dropdown>
             </div>
           </template>

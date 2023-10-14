@@ -15,12 +15,13 @@ if (!u && location.pathname == '/'){
 }
 export const user = {
   ...u, 
-  contacts: (await users()).filter(function (contact: any): boolean {
+  contacts: (await users())
+  .filter((contact: any) => {
     return (contact.id !== u.id);
   })
 };
 
-export const conversations = await allConversations();
+export const conversations = await allConversations(user.id);
 
 export const fetchData = () => {
   return {

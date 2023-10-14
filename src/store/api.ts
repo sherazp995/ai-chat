@@ -90,11 +90,28 @@ export async function getConversation(conversationId: any) {
         return [];
     }
 }
-export async function allConversations() {
+
+export async function removeFromConversation(data: any) {
     try {
         let h = headers();
         if (h){
-            let response = await axios.get(apiPath + `conversations`, h)
+            let response = await axios.post(apiPath + `conversations/remove`, data, h)
+            if (!!response.data.result) {
+                return response.data.result;
+            }
+        }
+        return false;
+    } catch (e) {
+        console.log(e);
+        return false;
+    }
+}
+
+export async function allConversations(id: any) {
+    try {
+        let h = headers();
+        if (h){
+            let response = await axios.get(apiPath + `conversations/user/${id}`, h)
             if (!!response.data.result) {
                 return response.data.result;
             }

@@ -81,19 +81,19 @@ const handleCloseConversation = () => {
           {{ getName(activeConversation) }}
         </Typography>
 
-        <Typography variant="body-2" class="font-extralight default-outline rounded-[4px]" tabindex="0"
+        <!-- <Typography variant="body-2" class="font-extralight default-outline rounded-[4px]" tabindex="0"
           aria-label="Last seen december 16, 2019">
           Last seen Dec 16, 2019
-        </Typography>
+        </Typography> -->
       </div>
     </div>
 
     <div class="flex" :class="{ hidden: store.status === 'loading' }">
       <!--search button-->
-      <IconButton title="search messages" aria-label="search messages" @click="props.handleOpenSearch"
+      <!-- <IconButton title="search messages" aria-label="search messages" @click="props.handleOpenSearch"
         class="group w-7 h-7 mr-3">
         <MagnifyingGlassIcon class="w-[20px] h-[20px] text-gray-400 group-hover:text-indigo-300" />
-      </IconButton>
+      </IconButton> -->
 
       <div class="relative">
         <!--dropdown menu button-->

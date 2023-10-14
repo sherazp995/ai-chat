@@ -20,7 +20,7 @@ const props = defineProps<{
 
 const store = useStore();
 
-const activeConversation = <IConversation>inject("activeConversation");
+let activeConversation = <IConversation>inject("activeConversation");
 
 const openSearch = ref(false);
 
@@ -35,6 +35,10 @@ const handleOpenSearch = () => {
 const handleOpenInfo = () => {
   openInfo.value = true;
 };
+
+const conversationChange = (data: any) => {
+  activeConversation = data.conversation;
+}
 </script>
 
 <template>
@@ -80,6 +84,7 @@ const handleOpenInfo = () => {
       :open="openInfo"
       :closeModal="() => (openInfo = false)"
       :conversation="activeConversation"
+      @conversation-change="conversationChange"
     />
 
   </div>

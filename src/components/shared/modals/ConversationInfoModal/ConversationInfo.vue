@@ -96,25 +96,25 @@ const imageUrl = computed(() => {
               </span>
             </Typography>
 
-            <Typography variant="body-2" class="font-extralight text-start">
+            <!-- <Typography variant="body-2" class="font-extralight text-start"> -->
               <!--last seen-->
-              <span v-if="conversation.type === 'couple' || contact">
+              <!-- <span v-if="conversation.type === 'couple' || contact">
                 Last seen Dec 16, 2019
-              </span>
+              </span> -->
 
               <!--or number of group members-->
-              <span
-                v-else-if="['group', 'broadcast'].includes(conversation.type)"
+              <!-- <span
+                v-else-if="['group', 'broadcast'].includes(conversation?.type)"
               >
-                {{ conversation.contacts.length }}
+                {{ conversation.contacts?.length }}
                 Contacts
-              </span>
-            </Typography>
+              </span> -->
+            <!-- </Typography> -->
           </div>
 
           <IconButton
             title="edit group"
-            v-if="['group', 'broadcast'].includes(conversation.type)"
+            v-if="['group', 'broadcast'].includes(conversation?.type)"
             class="group w-7 h-7"
           >
             <PencilIcon
@@ -147,7 +147,7 @@ const imageUrl = computed(() => {
       <!--(group) members-->
       <div
         v-if="
-          ['group', 'broadcast'].includes(conversation.type) && !props.contact
+          ['group', 'broadcast'].includes(conversation?.type) && !props.contact
         "
         class="px-5 flex items-center pb-5"
       >
@@ -167,9 +167,9 @@ const imageUrl = computed(() => {
     </div>
 
     <!--bottom-->
-    <div class="w-full border-t border-gray-100 dark:border-gray-700">
+    <!-- <div class="w-full border-t border-gray-100 dark:border-gray-700"> -->
       <!--block contact-->
-      <div
+      <!-- <div
         v-if="conversation.type === 'couple' || props.contact"
         class="px-5 pt-5 group"
       >
@@ -179,10 +179,10 @@ const imageUrl = computed(() => {
           link
           color="danger"
         />
-      </div>
+      </div> -->
 
       <!--delete contact-->
-      <div
+      <!-- <div
         v-if="conversation.type === 'couple' || props.contact"
         class="px-5 pt-5 group"
       >
@@ -192,12 +192,12 @@ const imageUrl = computed(() => {
           link
           color="danger"
         />
-      </div>
+      </div> -->
 
       <!--exit group-->
-      <div
+      <!-- <div
         v-if="
-          ['group', 'broadcast'].includes(conversation.type) && !props.contact
+          ['group', 'broadcast'].includes(conversation?.type) && !props.contact
         "
         class="px-5 pt-5 flex items-center group"
       >
@@ -207,7 +207,7 @@ const imageUrl = computed(() => {
           link
           color="danger"
         />
-      </div>
-    </div>
+      </div> -->
+    <!-- </div> -->
   </div>
 </template>

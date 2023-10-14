@@ -1,92 +1,90 @@
-const socket = require('socket.io');
-const { runPrompt } = require('./openai');
+const socket = require("socket.io");
 let io;
 
 function initializeSocket(server) {
-    io = socket(server, {
-        cors: {
-            origin: "*",
-            methods: ["GET", "POST"],
-            credentials: true
-        }
-    });
+  io = socket(server, {
+    cors: {
+      origin: "*",
+      methods: ["GET", "POST"],
+      credentials: true,
+    },
+  });
 
-    // io.use((socket, next) => {
-    //     const username = socket.handshake.auth.username;
-    //     if (!username) {
-    //         return next(new Error("invalid username"));
-    //     }
-    //     socket.username = username;
-    //     next();
+  // io.use((socket, next) => {
+  //     const username = socket.handshake.auth.username;
+  //     if (!username) {
+  //         return next(new Error("invalid username"));
+  //     }
+  //     socket.username = username;
+  //     next();
+  // });
+
+  io.on("connection", (socket) => {
+    // fetch existing users
+    // const users = [];
+    console.log("user connected");
+    // for (let [id, socket] of io.of("/").sockets) {
+    //     users.push({
+    //         userID: id,
+    //         username: socket.username,
+    //     });
+    // }
+    // socket.emit("users", users);
+
+    // notify existing users
+    // socket.broadcast.emit("user connected", {
+    //     userID: socket.id,
+    //     username: socket.username,
     // });
 
-    io.on("connection", (socket) => {
-        // fetch existing users
-        // const users = [];
-        console.log('user connected')
-        // for (let [id, socket] of io.of("/").sockets) {
-        //     users.push({
-        //         userID: id,
-        //         username: socket.username,
-        //     });
-        // }
-        // socket.emit("users", users);
+    // forward the private message to the right recipient
+    // socket.on("private message", async ({ question, to }) => {
+    //     let response;
 
-        // notify existing users
-        // socket.broadcast.emit("user connected", {
-        //     userID: socket.id,
-        //     username: socket.username,
-        // });
+    //     if (!question) {
+    //         response = await runPrompt(
+    //             `Hi, my name is ${socket.username}. I need counseling.`
+    //         );
+    //     } else {
+    //         response = await runPrompt(`${question}`);
+    //     }
 
-        // forward the private message to the right recipient
-        // socket.on("private message", async ({ question, to }) => {
-        //     let response;
+    // console.log(response);
 
-        //     if (!question) {
-        //         response = await runPrompt(
-        //             `Hi, my name is ${socket.username}. I need counseling.`
-        //         );
-        //     } else {
-        //         response = await runPrompt(`${question}`);
-        //     }
+    //     try {
+    //         // Emit the AI response to both sender and recipient
+    //         socket.emit("private message", {
+    //             content: {
+    //                 question: question, // Add the question to the response
+    //                 answer: response,
+    //             },
+    //             from: socket.id,
+    //         });
 
-            // console.log(response);
+    //         socket.to(to).emit("private message", {
+    //             content: {
+    //                 question: question,
+    //                 answer: response,
+    //              }, // Send the parsed question and answer
+    //             from: socket.id,
+    //         });
+    //     } catch (error) {
+    //         console.error('Error parsing JSON:', error);
+    //     }
+    // });
 
-        //     try {
-        //         // Emit the AI response to both sender and recipient
-        //         socket.emit("private message", {
-        //             content: {
-        //                 question: question, // Add the question to the response
-        //                 answer: response,
-        //             },
-        //             from: socket.id,
-        //         });
-
-        //         socket.to(to).emit("private message", {
-        //             content: { 
-        //                 question: question,
-        //                 answer: response,
-        //              }, // Send the parsed question and answer
-        //             from: socket.id,
-        //         });
-        //     } catch (error) {
-        //         console.error('Error parsing JSON:', error);
-        //     }
-        // });
-
-
-        // notify users upon disconnection
-        socket.on("disconnect", () => {
-            socket.broadcast.emit("user disconnected", socket.id);
-        });
+    // notify users upon disconnection
+    socket.on("disconnect", () => {
+      socket.broadcast.emit("user disconnected", socket.id);
     });
+  });
 }
 
 function getIO() {
-    return io;
+  return io;
 }
 
 module.exports = {
-    initializeSocket,
-    getIO,
+  initializeSocket,
+  getIO,
 };

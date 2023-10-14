@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import useStore from "@src/store/store";
-import type { Ref } from "vue";
-import { computed, ref } from "vue";
+import { computed } from "vue";
 
 import Chat from "@src/components/views/HomeView/Chat/Chat.vue";
 import Navigation from "@src/components/views/HomeView/Navigation/Navigation.vue";
@@ -33,20 +32,17 @@ const handleConversationChange = async (conversationId: number) => {
   store.activeSidebarComponent = "messages";
   store.activeConversationId = conversationId;
   const index = getConversationIndex(conversationId);
-  store.conversations[index].messages = await allMessages(conversationId);
+  !!index && (store.conversations[index].messages = await allMessages(conversationId));
   store.conversationOpen = "open";
 };
 
 onMounted(() => {
   socket.connect();
 
-  // if(!store.user?.id){
-  //   router.push('/access/sign-in')
-  // }
   socket.on("conversation", async (event) => {
     if (event.message.sender.id !== store.user?.id) {
       const index = getConversationIndex(event.message.conversationId);
-      if (index >= 0) {
+      if (!!index && index >= 0) {
         store.conversations[index].unread = (store.conversations[index].unread || 0) + 1;
         store.conversations[index].messages?.push(event.message);
       } else {
@@ -55,6 +51,11 @@ onMounted(() => {
         store.conversations.push(conv);
       }
     }
+  });
+
+  socket.on("conversationUpdate", async (event) => {
+    const index = getConversationIndex(event.conversation.id);
+    !!index && (store.conversations[index] = event.conversation);
   });
 });
 
