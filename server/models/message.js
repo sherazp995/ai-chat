@@ -21,8 +21,8 @@ module.exports = (sequelize, DataTypes) => {
   }
   Message.init({
     type: DataTypes.STRING,
-    content: DataTypes.STRING,
-    aiResponse: DataTypes.STRING,
+    content: DataTypes.TEXT,
+    aiResponse: DataTypes.TEXT,
     date: DataTypes.STRING,
     senderId: DataTypes.INTEGER,
     replyTo: DataTypes.STRING,
