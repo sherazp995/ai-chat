@@ -13,10 +13,10 @@ module.exports = {
         type: Sequelize.STRING
       },
       content: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       aiResponse: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       date: {
         type: Sequelize.STRING

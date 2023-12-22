@@ -12,7 +12,6 @@ import { allMessages, getSingleConversation } from "@src/store/api";
 import { getConversationIndex } from "@src/utils";
 import { onMounted, onUnmounted } from "vue";
 import socket from "@src/socket";
-import router from "@src/router";
 
 let store = useStore();
 

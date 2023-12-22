@@ -31,7 +31,7 @@ const store = useStore();
     >
       <img
         v-if="!store.settings.darkMode"
-        src="@src/assets//vectors/logo.svg"
+        src="@src/assets/vectors/logo.svg"
         class="w-8 h-7"
         alt="gray bird logo"
       />

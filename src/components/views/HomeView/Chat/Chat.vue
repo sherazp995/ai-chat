@@ -9,6 +9,7 @@ import ChatMiddle from "@src/components/views/HomeView/Chat/ChatMiddle/ChatMiddl
 import ChatTop from "@src/components/views/HomeView/Chat/ChatTop/ChatTop.vue";
 
 const store = useStore();
+const status = ref(store.status);
 
 // search the selected conversation using activeConversationId.
 const activeConversation = computed(() => {
@@ -79,6 +80,11 @@ const handleCloseSelect = () => {
   selectAll.value = false;
   selectedMessages.value = [];
 };
+
+// (event handle close Select)
+const statusChange = (data: any) => {
+  status.value = data.status;
+};
 </script>
 
 <template>
@@ -91,10 +97,11 @@ const handleCloseSelect = () => {
       :handle-close-select="handleCloseSelect"
     />
     <ChatMiddle
+      :status="status"
       :selected-messages="selectedMessages"
       :handle-select-message="handleSelectMessage"
       :handle-deselect-message="handleDeselectMessage"
     />
-    <ChatBottom />
+    <ChatBottom :status="status" @status-change="statusChange" />
   </div>
 </template>

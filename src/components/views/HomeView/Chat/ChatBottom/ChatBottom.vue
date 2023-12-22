@@ -14,6 +14,12 @@ import { createMessage } from "@src/store/api";
 const store = useStore();
 
 const activeConversation = <IConversation>inject("activeConversation");
+  
+const props = defineProps<{
+  status: string;
+}>();
+
+const emits = defineEmits(["status-change"]);
 
 // the content of the message.
 const value: Ref<string> = ref("");
@@ -31,6 +37,7 @@ onMounted(() => {
 });
 
 const onSubmit = async () => {
+  emits('status-change', {status: 'loading'})
   let formData: any = {
     content: value.value,
     date: new Date().toDateString(),
@@ -47,6 +54,7 @@ const onSubmit = async () => {
     value.value = "";
     handleSetDraft();
   }
+  emits('status-change', {status: 'success'})
 };
 </script>
 
@@ -63,7 +71,7 @@ const onSubmit = async () => {
 
       <div
         class="h-auto min-h-[84px] p-5 flex items-end"
-        v-if="store.status !== 'loading'"
+        v-if="props.status !== 'loading'"
       >
         <!--message textarea-->
         <div class="grow md:mr-5 xs:mr-4 self-end">
